@@ -3,6 +3,7 @@ module.exports = {
   once: true,
   async execute(client) {
     console.log(`Logged in as ${client.user.tag}.`);
+    
     try {
       let link = await client.generateInvite({
         permissions: ["ADMINISTRATOR"],
@@ -11,5 +12,7 @@ module.exports = {
     } catch (e) {
       console.log(e.stack);
     }
+    // prettier-ignore
+    client.user.setActivity("you try to beat MoF stage 5", { type: "WATCHING"});
   },
 };
