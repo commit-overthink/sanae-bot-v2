@@ -3,8 +3,11 @@
 * Random quote/copypasta generator
 * Voting system for movies
 * Moderation tools (if server ever scales)
-* !roll from osu! (make 69 show flushed emoji)
-* gambling
+* !roll from osu! 
+* About command (link to github)
+* currency system
+* gambling system, where you can bet a certain amount of currency, & a coin flip will determine whether its doubled or lost.
+* Uptime command
 
 ## Command metadata:
 
