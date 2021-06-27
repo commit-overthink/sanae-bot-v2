@@ -4,8 +4,6 @@ const Discord = require("discord.js");
 module.exports = {
   name: "message",
   execute(message) {
-    console.log(message.client.cooldowns);
-
     if (!message.content.startsWith(prefix) || message.author.bot) return;
 
     const args = message.content.slice(prefix.length).trim().split(/ +/);
