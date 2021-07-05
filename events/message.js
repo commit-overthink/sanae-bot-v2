@@ -3,9 +3,9 @@ const Discord = require("discord.js");
 
 module.exports = {
   name: "message",
-  execute(message) {
+  execute(message, Prompts) {
     if (!message.content.startsWith(prefix) || message.author.bot) return;
-
+    
     const args = message.content.slice(prefix.length).trim().split(/ +/);
     const commandName = args.shift().toLowerCase();
     const { cooldowns } = message.client;
@@ -63,7 +63,12 @@ module.exports = {
     setTimeout(() => timestamps.delete(message.author.id), cooldownAmount);
 
     try {
-      command.execute(message, args);
+      // for poll commands
+      if (command.usePrompts === true) {
+        command.execute(message, args, Prompts);
+      } else {
+        command.execute(message, args);
+      }
     } catch (error) {
       console.error(error);
       message.channel.send(

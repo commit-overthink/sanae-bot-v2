@@ -18,3 +18,4 @@ args: <boolean> determines whether command arguments are required or not
 guildOnly: <boolean> determines whether the command can only be used in a server
 cooldown: <int> sets a specific cooldown, default is in config file
 usage: <string> shows the command's specific usage
+usePrompts: defines if a command uses the Prompt's modal (and hence uses the database)
