@@ -1,11 +1,11 @@
 module.exports = {
-	name: 'ready',
+	name: "ready",
 	once: true,
 	async execute(client, Polls) {
 		console.log(`Logged in as ${client.user.tag}.`);
 
-		client.user.setActivity('you try to beat MoF stage 5', {
-			type: 'WATCHING',
+		client.user.setActivity("you try to beat MoF stage 5", {
+			type: "WATCHING",
 		});
 		// sets up Prompts modal for poll commands
 		Polls.sync();

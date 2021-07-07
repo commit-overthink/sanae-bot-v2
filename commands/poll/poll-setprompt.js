@@ -1,14 +1,14 @@
 module.exports = {
-	name: 'poll-setprompt',
-	description: 'Sets the prompt for a poll. Use `\\n` to make new lines.',
+	name: "poll-setprompt",
+	description: "Sets the prompt for a poll. Use `\\n` to make new lines.",
 	args: true,
-	usage: '<prompt>',
+	usage: "<prompt>",
 	usePolls: true,
 	async execute(message, args, Polls) {
-		let promptDescription = args.join(' ');
+		let promptDescription = args.join(" ");
 		promptDescription = promptDescription.toString();
 		// Weird capitalization, but I needed to pass the capitalized version through to this file somehow.
-		user = message.author.username;
+		const user = message.author.username;
 
 		async function checkIfPollExists() {
 			const poll = await Polls.findOne({ where: { user: user } });
@@ -37,12 +37,12 @@ module.exports = {
 			}
 		}
 		catch (e) {
-			if (e === 'SequelizeUniqueConstraintError') {
-				return message.reply('Sorry, but that\'s the current prompt.');
+			if (e === "SequelizeUniqueConstraintError") {
+				return message.reply("Sorry, but that's the current prompt.");
 			}
 			console.log(e);
 			return message.reply(
-				'Oops, something went wrong with changing the prompt.',
+				"Oops, something went wrong with changing the prompt.",
 			);
 		}
 	},
