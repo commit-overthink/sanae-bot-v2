@@ -4,3 +4,5 @@
 # misc
 config.json
 database.sqlite
+.eslintrc.json
+package-lock.json
