@@ -3,9 +3,9 @@ const Discord = require("discord.js");
 
 module.exports = {
   name: "message",
-  execute(message, Prompts) {
+  execute(message, Polls) {
     if (!message.content.startsWith(prefix) || message.author.bot) return;
-    
+
     const args = message.content.slice(prefix.length).trim().split(/ +/);
     const commandName = args.shift().toLowerCase();
     const { cooldowns } = message.client;
@@ -42,7 +42,6 @@ module.exports = {
 
     if (timestamps.has(message.author.id)) {
       const expirationTime = timestamps.get(message.author.id) + cooldownAmount;
-      console.log(expirationTime);
       if (now < expirationTime) {
         const timeLeft = (expirationTime - now) / 1000;
         let multipleSeconds = "seconds";
@@ -64,8 +63,8 @@ module.exports = {
 
     try {
       // for poll commands
-      if (command.usePrompts === true) {
-        command.execute(message, args, Prompts);
+      if (command.usePolls === true) {
+        command.execute(message, args, Polls);
       } else {
         command.execute(message, args);
       }

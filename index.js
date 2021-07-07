@@ -21,9 +21,9 @@ const sequelize = new Sequelize("database", "user", "password", {
 });
 
 // create schema for poll-prompt command
-const Prompts = sequelize.define("prompts", {
+const Polls = sequelize.define("polls", {
   user: Sequelize.STRING,
-  prompt: Sequelize.TEXT
+  prompt: Sequelize.TEXT,
 });
 
 for (const folder of commandFolders) {
@@ -44,11 +44,9 @@ for (const folder of commandFolders) {
 for (const file of eventFiles) {
   const event = require(`./events/${file}`);
   if (event.once) {
-    client.once(event.name, (...args) =>
-      event.execute(...args, client, Prompts)
-    );
+    client.once(event.name, (...args) => event.execute(...args, client, Polls));
   } else {
-    client.on(event.name, (...args) => event.execute(...args, Prompts));
+    client.on(event.name, (...args) => event.execute(...args, Polls));
   }
 }
 

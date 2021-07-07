@@ -1,15 +1,16 @@
 module.exports = {
   name: "ready",
   once: true,
-  async execute(client, Prompts) {
+  async execute(client, Polls) {
     console.log(`Logged in as ${client.user.tag}.`);
 
-    // prettier-ignore
-    client.user.setActivity("you try to beat MoF stage 5", { type: "WATCHING"});
-    Prompts.sync();
+    client.user.setActivity("you try to beat MoF stage 5", {
+      type: "WATCHING",
+    });
     // sets up Prompts modal for poll commands
-    // Prompts.sync({ force: true });
+    Polls.sync();
     // use to reset the modal.
+    // Polls.sync({ force: true });
 
     // try {
     //   let link = await client.generateInvite({
