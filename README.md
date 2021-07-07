@@ -20,17 +20,27 @@ For creating roles manager: https://www.reddit.com/r/Discordjs/comments/m4qr8i/h
 ## Config.json
 
 prefix: <string> the prefix that the bot scans messages for to recieve commands
+
 token: <string> the bot's token for connecting to Discord
+
 defaultCooldown: <int> default command cooldown
+
 maxPollTime: <int> maximum time poll-start can be run for
 
 ## Command metadata:
 
 name: <string> name of the command
+
 aliases: <array> a list of alternative command names that the user can use
+
 description: <string> description of the command
+
 args: <boolean> determines whether command arguments are required or not
+
 guildOnly: <boolean> determines whether the command can only be used in a server
+
 cooldown: <int> sets a specific cooldown, default is in config file
+
 usage: <string> shows the command's specific usage
+
 usePrompts: defines if a command uses the Prompt's modal (and hence uses the database)
