@@ -27,7 +27,7 @@ defaultCooldown: <int> default command cooldown
 
 maxPollTime: <int> maximum time poll-start can be run for
 
-## Command metadata:
+## Command metadata
 
 name: <string> name of the command
 
@@ -43,4 +43,4 @@ cooldown: <int> sets a specific cooldown, default is in config file
 
 usage: <string> shows the command's specific usage
 
-usePrompts: defines if a command uses the Prompt's modal (and hence uses the database)
+usePolls: defines if a command uses the Polls modal (and hence uses the database)
