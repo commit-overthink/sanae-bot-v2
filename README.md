@@ -15,7 +15,7 @@
 
 ## Notes
 
-For creating roles manager: https://www.reddit.com/r/Discordjs/comments/m4qr8i/how_to_have_reaction_collector_run_infinitely_or/
+[For creating roles manager](https://www.reddit.com/r/Discordjs/comments/m4qr8i/how_to_have_reaction_collector_run_infinitely_or/)
 
 ## Config.json
 
