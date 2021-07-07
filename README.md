@@ -1,6 +1,5 @@
 ## Up next:
 
-* Fortifying polls commands from abuse
 * Making polls system more semantic, with any amount of emoji's acceptable (with a max amount of course)
 
 ## Ideas
@@ -19,28 +18,28 @@
 
 ## Config.json
 
-prefix: <string> the prefix that the bot scans messages for to recieve commands
+prefix: (string) the prefix that the bot scans messages for to recieve commands
 
-token: <string> the bot's token for connecting to Discord
+token: (string) the bot's token for connecting to Discord
 
-defaultCooldown: <int> default command cooldown
+defaultCooldown: (int) default command cooldown
 
-maxPollTime: <int> maximum time poll-start can be run for
+maxPollTime: (int) maximum time poll-start can be run for
 
 ## Command metadata
 
-name: <string> name of the command
+name: (string) name of the command
 
-aliases: <array> a list of alternative command names that the user can use
+aliases: (array) a list of alternative command names that the user can use
 
-description: <string> description of the command
+description: (string) description of the command
 
-args: <boolean> determines whether command arguments are required or not
+args: (boolean) determines whether command arguments are required or not
 
-guildOnly: <boolean> determines whether the command can only be used in a server
+guildOnly: (boolean) determines whether the command can only be used in a server
 
-cooldown: <int> sets a specific cooldown, default is in config file
+cooldown: (int) sets a specific cooldown, default is in config file
 
-usage: <string> shows the command's specific usage
+usage: (string) shows the command's specific usage
 
-usePolls: defines if a command uses the Polls modal (and hence uses the database)
+usePolls: (boolean) defines if a command uses the Polls modal (and hence uses the database)
