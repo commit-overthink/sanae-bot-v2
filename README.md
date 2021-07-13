@@ -1,6 +1,6 @@
 ## Up next:
 
-* Making polls system more semantic, with any amount of emoji's acceptable (with a max amount of course)
+Rolls manager or currency system.
 
 ## Ideas
 

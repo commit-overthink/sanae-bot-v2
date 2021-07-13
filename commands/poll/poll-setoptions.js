@@ -1,5 +1,6 @@
 module.exports = {
   name: "poll-setoptions",
+  aliases: ["poll-options", "poll-setoption", "pollsetoptions", "polloptions", "pollsetoption", "polloption"],
   description:
     "Sets the options (what you react to) in a poll. Add as many as you like.",
   args: true,

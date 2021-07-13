@@ -9,6 +9,7 @@ const { prefix, minPollTime, maxPollTime } = require("../../config.json");
 
 module.exports = {
 	name: "poll-start",
+	aliases: ["pollstart"],
 	description:
     "Starts a poll. Setting the prompt can be done using the poll-set command",
 	args: true,

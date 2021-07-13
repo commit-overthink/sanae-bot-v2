@@ -1,6 +1,7 @@
 module.exports = {
 	name: "poll-setprompt",
-	description: "Sets the prompt for a poll. Use `\\n` to make new lines.",
+	aliases: ["poll-prompt", "pollsetprompt", "pollprompt"],
+	description: "Sets the prompt for a poll. Use `SHIFT + ENTER` to make new lines.",
 	args: true,
 	usage: "<prompt>",
 	usePolls: true,
