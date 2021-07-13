@@ -1,5 +1,3 @@
-// TODO: Add support for normal emojis
-
 module.exports = {
   name: "poll-setoptions",
   description:
@@ -8,10 +6,6 @@ module.exports = {
   usage: "<emoji 1> <emoji ...>",
   usePolls: true,
   execute(message, args, Polls) {
-    // check if options are already added, clear if so (this could be made more efficient by just replacing them)
-    // for each arg, push into array
-    // push array to database
-
     const checkIfPollExists = async () => {
       try {
         const poll = await Polls.findOne({
@@ -32,11 +26,14 @@ module.exports = {
       try {
         const discordRegex = /:(.*?):/;
         const unicodeRegex = /(\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])/gi;
+        // Most unicode ranges for emojis
         let emojiName = discordRegex.exec(inputedEmoji);
         let isUnicodeEmoji = false;
         if (emojiName != null) {
           emojiName = emojiName[1];
           const emoji = message.guild.emojis.cache.find((object) => object.name === emojiName);
+          // We need to do some regex magic here to get the emoji's name out of it's <name:snowflake> form
+          // If returned regex object is null (the emoji doesn't exist), undefined is returned to send the user an error.
           return { emoji, isUnicodeEmoji };
         } else if (unicodeRegex.test(inputedEmoji)) {
           const emoji = inputedEmoji;
@@ -44,9 +41,8 @@ module.exports = {
           return { emoji, isUnicodeEmoji };
         } else {
           return undefined;
+          // Returns undefined in case if the inputted emoji doesn't exist, should send an error to the user later.
         }
-        // we need to do some regex magic here to get the emoji's name out of it's <name:snowflake> form
-        // if returned regex object is null (the emoji doesn't exist), undefined is returned to send the user an error.
       } catch (e) {
         console.error(e);
       }
