@@ -1,3 +1,5 @@
+// TODO: Add support for normal emojis
+
 module.exports = {
   name: "poll-setoptions",
   description:
@@ -28,11 +30,18 @@ module.exports = {
 
     const checkIfEmojiExists = (inputedEmoji) => {
       try {
-        const regex = /:(.*?):/;
-        let emojiName = regex.exec(inputedEmoji);
+        const discordRegex = /:(.*?):/;
+        const unicodeRegex = /(\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])/gi;
+        let emojiName = discordRegex.exec(inputedEmoji);
+        let isUnicodeEmoji = false;
         if (emojiName != null) {
           emojiName = emojiName[1];
-          return message.guild.emojis.cache.find((object) => object.name === emojiName);
+          const emoji = message.guild.emojis.cache.find((object) => object.name === emojiName);
+          return { emoji, isUnicodeEmoji };
+        } else if (unicodeRegex.test(inputedEmoji)) {
+          const emoji = inputedEmoji;
+          isUnicodeEmoji = true;
+          return { emoji, isUnicodeEmoji };
         } else {
           return undefined;
         }
@@ -90,19 +99,25 @@ module.exports = {
       let cancelSetPrompt = false;
 
       args.forEach((element) => {
-        const emoji = checkIfEmojiExists(element);
-        if (emoji != undefined) {
-          options.push(emoji.name);
+        const { emoji, isUnicodeEmoji } = checkIfEmojiExists(element);
+        if (isUnicodeEmoji) {
+          // Unicode emojis are not objects, so we must handle them differently.
+          options.push(emoji);
           emojis.push(emoji);
         } else {
-          cancelSetPrompt = true;
-          message.channel.send(`My apologies ${message.author}, but there doesn't seem to be an emoji called \`${element}\`.`);
+          if (emoji != undefined) {
+            options.push(emoji.name);
+            emojis.push(emoji);
+          } else {
+            cancelSetPrompt = true;
+            message.channel.send(`My apologies ${message.author}, but there doesn't seem to be an emoji called \`${element}\`.`);
+          }
         }
       });
       if (!cancelSetPrompt) {
         storeOptions(options, emojis);
-        // this will push the emoji's name instead of storing the entire emoji object for efficency
-        // however, this does mean that the object will have to be looked up again when poll-start is called by the user.
+        // This will push the emoji's name instead of storing the entire emoji object for efficency.
+        // However, this does mean that the object will have to be looked up again when poll-start is called by the user.
       } else {
         // Do nothing
       }

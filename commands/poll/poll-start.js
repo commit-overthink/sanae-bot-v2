@@ -1,3 +1,4 @@
+const Discord = require("discord.js");
 const { prefix, minPollTime, maxPollTime } = require("../../config.json");
 
 // Stop poll command
@@ -14,16 +15,16 @@ module.exports = {
 	usePolls: true,
 	cooldown: 0,
 	execute(message, args, Polls) {
+		// Gets required information for command to work
 		const getInformation = async () => {
 			try {
 				const pollTime = args[0] * 1000;
-				let prompt = "";
+				let embed = {};
 				let options = [];
 				let isRunningPoll = false;
 				let cancelMessage = false;
 				const poll = await Polls.findOne({ where: { user: message.author.username } });
 
-				// these emojis will be change to be more semantic
 				if (pollTime >= maxPollTime * 1000) {
 					cancelMessage = true;
 					message.channel.send(`Sorry ${message.author}, but the poll must be at most \`${maxPollTime}\` seconds long.`);
@@ -33,25 +34,26 @@ module.exports = {
 					message.channel.send(`Sorry ${message.author}, but you need to set the poll's prompt using \`${prefix}poll-setprompt\`. Type \`${prefix}help\` for more information.`);
 				}
 				else {
-					prompt = `*${message.author}'s poll:* ${poll.prompt}`;
+					embed = new Discord.MessageEmbed()
+						.setColor("#59be84")
+						.setTitle(`${message.author.username}'s poll`)
+						.setDescription(poll.prompt)
+						;
 					options = poll.options.split(",");
 					// when options is read from the database, it is a string, so it needs to be parsed.
 					isRunningPoll = poll.isRunningPoll;
-					console.log(isRunningPoll);
 				}
 				if (isRunningPoll) {
 					cancelMessage = true;
 					message.channel.send(`Sorry ${message.author}, but you're already running a poll!`);
 				}
-				return { prompt, pollTime, options, cancelMessage };
+				return { embed, pollTime, options, cancelMessage };
 			} catch (e) {
 				console.error(e);
 			}
 		};
-		// Gets required information for command to work
 
 		const calculateVote = (results) => {
-			console.log(results);
 			let largest = 0;
 			let tie = false;
 			let noWinners = false;
@@ -71,7 +73,6 @@ module.exports = {
 				}
 				else if (results[i].option.count === largest) {
 					tie = true;
-					console.log(results[i].option.count, largest);
 				}
 			}
 
@@ -86,13 +87,12 @@ module.exports = {
 				message.channel.send(`Woah ${message.author}, ${largestEmoji} won amazingly with ${largest} ${votePlurality}!`);
 			}
 
-			console.log(`${largestEmoji.name} count: ${largest}`);
 		};
 
 		const startPoll = async () => {
 			try {
 				const info = await getInformation(args, Polls).catch(console.error);
-				const prompt = info.prompt;
+				const embed = info.embed;
 				const pollTime = info.pollTime;
 				const options = info.options;
 				let cancelMessage = info.cancelMessage;
@@ -115,7 +115,7 @@ module.exports = {
 					// Do nothing
 				}
 				else {
-					message.channel.send(prompt).then(async (sentMessage) => {
+					message.channel.send(embed).then(async (sentMessage) => {
 						// == pre poll ==
 						const results = [];
 						let running = false;
@@ -133,11 +133,22 @@ module.exports = {
 							}
 						};
 
+						const getEmojis = (element) => {
+							let emoji = message.guild.emojis.cache.find((object) => object.name === element);
+							if (emoji != undefined) {
+								const filter = (reaction) => reaction.emoji.name === emoji.name;
+								return { emoji, filter };
+							} else {
+								emoji = element;
+								const filter = (reaction) => reaction.emoji.name === element;
+								return { emoji, filter };
+							}
+						};
+
 						await Polls.update({ isRunningPoll: true }, { where: { user: message.author.username } });
 						// == start poll ==
 						options.forEach(async element => {
-							const emoji = message.guild.emojis.cache.find((object) => object.name === element);
-							const filter = (reaction) => reaction.emoji.name === emoji.name;
+							const { emoji, filter } = getEmojis(element);
 							const collector = sentMessage.createReactionCollector(filter, { time: pollTime });
 							let count = 0;
 
@@ -146,8 +157,6 @@ module.exports = {
 								count++;
 							});
 							collector.on("end", async () => {
-								console.log(`${emoji.name} collector ended`);
-								console.log(`${emoji.name} count: ${count}`);
 								const object = {};
 								object.emoji = emoji;
 								object.count = count;
