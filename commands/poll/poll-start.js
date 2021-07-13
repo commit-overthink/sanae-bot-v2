@@ -1,6 +1,7 @@
 const Discord = require("discord.js");
 const { prefix, minPollTime, maxPollTime } = require("../../config.json");
 
+// TODO:
 // Stop poll command
 // Make notifications for longer polls be sent
 // certain roles can mark polls important or urgent, allowing the poll to be longer than one hour, also ^^^sending notifications. also sends the result in #announcements
@@ -35,10 +36,10 @@ module.exports = {
 				}
 				else {
 					embed = new Discord.MessageEmbed()
-						.setColor("#59be84")
-						.setTitle(`${message.author.username}'s poll`)
-						.setDescription(poll.prompt)
-						;
+					.setColor("#59be84")
+					.setTitle(`${message.author.username}'s poll:`)
+					.setDescription(poll.prompt)
+					;
 					options = poll.options.split(",");
 					// when options is read from the database, it is a string, so it needs to be parsed.
 					isRunningPoll = poll.isRunningPoll;
@@ -54,6 +55,7 @@ module.exports = {
 		};
 
 		const calculateVote = (results) => {
+			// could add messages for near ties, unanimous votes, votes where one option superceeds another...
 			let largest = 0;
 			let tie = false;
 			let noWinners = false;
@@ -76,17 +78,49 @@ module.exports = {
 				}
 			}
 
+			if (largest === 1) {votePlurality = "vote";}
+			const resultsMessages =
+			{
+				noWinners: [
+					`lmao no one responded to your poll ${message.author}`,
+					`Sorry ${message.author}, but nobody wanted to vote on your poll.`,
+					`${message.author}, you should try to get more people to vote on your poll next time.`,
+				],
+				tie: [
+					`${message.author}, tie!`,
+					`${message.author}, it's a tie!`,
+					`${message.author}, the vote is a tie!`,
+					`${message.author}, that was a very close tie!`,
+				],
+				lowVotes: [
+					`${message.author}, ${largestEmoji} just won with ${largest} ${votePlurality}!`,
+					`${message.author}, ${largestEmoji} won with ${largest} ${votePlurality}!`,
+					`${message.author}, the winning emoji is ${largestEmoji} with ${largest} ${votePlurality}!`,
+				],
+				highVotes: [
+					`Woah ${message.author}, ${largestEmoji} won amazingly with ${largest} ${votePlurality}!`,
+					`${message.author}, ${largestEmoji} had an outstanding win with ${largest} ${votePlurality}!`,
+					`Hey! In ${message.author}'s poll, ${largestEmoji} won with a suprising ${largest} ${votePlurality}!`,
+				],
+			};
+
 			if(tie) {
-				message.channel.send(`${message.author}, It's a tie!`);
+				const selectedMessage = Math.floor(Math.random() * resultsMessages.tie.length);
+				message.channel.send(resultsMessages.tie[selectedMessage]);
 			}
 			else if(noWinners) {
-				message.channel.send(`lmao no one responded to your poll ${message.author}`);
+				const selectedMessage = Math.floor(Math.random() * resultsMessages.noWinners.length);
+				message.channel.send(resultsMessages.noWinners[selectedMessage]);
 			}
 			else {
-				if (largest === 1) {votePlurality = "vote";}
-				message.channel.send(`Woah ${message.author}, ${largestEmoji} won amazingly with ${largest} ${votePlurality}!`);
+				if (largest < 3) {
+					const selectedMessage = Math.floor(Math.random() * resultsMessages.lowVotes.length);
+					message.channel.send(resultsMessages.lowVotes[selectedMessage]);
+				} else {
+					const selectedMessage = Math.floor(Math.random() * resultsMessages.highVotes.length);
+					message.channel.send(resultsMessages.highVotes[selectedMessage]);
+				}
 			}
-
 		};
 
 		const startPoll = async () => {
