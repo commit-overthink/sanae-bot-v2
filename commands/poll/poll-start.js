@@ -1,8 +1,9 @@
-const { prefix, maxPollTime } = require("../../config.json");
+const { prefix, minPollTime, maxPollTime } = require("../../config.json");
 
 // Stop poll command
 // Make notifications for longer polls be sent
 // certain roles can mark polls important or urgent, allowing the poll to be longer than one hour, also ^^^sending notifications. also sends the result in #announcements
+// run result messages to use a list of adverbs to make every message slightly different.
 
 module.exports = {
 	name: "poll-start",
@@ -11,22 +12,18 @@ module.exports = {
 	args: true,
 	usage: "<seconds>",
 	usePolls: true,
+	cooldown: 0,
 	execute(message, args, Polls) {
-		// Gets required information for command to work
 		const getInformation = async () => {
 			try {
-				let pollTime = args[0] * 1000;
+				const pollTime = args[0] * 1000;
 				let prompt = "";
+				let options = [];
 				let isRunningPoll = false;
 				let cancelMessage = false;
 				const poll = await Polls.findOne({ where: { user: message.author.username } });
-				const emojiPositive = message.guild.emojis.cache.find((emoji) => emoji.name === "cirnu");
-				const emojiNegative = message.guild.emojis.cache.find((emoji) => emoji.name === "sadpup");
+
 				// these emojis will be change to be more semantic
-				if (pollTime !== pollTime) {
-					// checks if pollTime is a number. If truesets pollTime to 0 which will later send the user an error.
-					pollTime = 0;
-				}
 				if (pollTime >= maxPollTime * 1000) {
 					cancelMessage = true;
 					message.channel.send(`Sorry ${message.author}, but the poll must be at most \`${maxPollTime}\` seconds long.`);
@@ -36,97 +33,129 @@ module.exports = {
 					message.channel.send(`Sorry ${message.author}, but you need to set the poll's prompt using \`${prefix}poll-setprompt\`. Type \`${prefix}help\` for more information.`);
 				}
 				else {
-					prompt = `${message.author}'s poll: \`${poll.prompt}\``;
+					prompt = `*${message.author}'s poll:* ${poll.prompt}`;
+					options = poll.options.split(",");
+					// when options is read from the database, it is a string, so it needs to be parsed.
 					isRunningPoll = poll.isRunningPoll;
+					console.log(isRunningPoll);
 				}
 				if (isRunningPoll) {
 					cancelMessage = true;
 					message.channel.send(`Sorry ${message.author}, but you're already running a poll!`);
 				}
-				return { prompt, pollTime, emojiPositive, emojiNegative, cancelMessage };
+				return { prompt, pollTime, options, cancelMessage };
 			} catch (e) {
 				console.error(e);
 			}
 		};
+		// Gets required information for command to work
 
-		// prettier-ignore
-		const calculateVote = (countPositive, countNegative, emojiPositive, emojiNegative) => {
+		const calculateVote = (results) => {
+			console.log(results);
+			let largest = 0;
+			let tie = false;
+			let noWinners = false;
 			let votePlurality = "votes";
-			if (countPositive > countNegative) {
-				if (countPositive < 2) {
-					votePlurality = "vote";
+			let largestEmoji = {};
+
+			for (let i = 0; i < results.length; i++) {
+				if(results[i].option.count > largest) {
+					largest = results[i].option.count;
+					largestEmoji = results[i].option.emoji;
+					tie = false;
+					noWinners = false;
 				}
-				message.channel.send(
-					`Woah ${message.author}, ${emojiPositive} won amazingly with ${countPositive} ${votePlurality}!`,
-				);
-			}
-			else if (countPositive < countNegative) {
-				if (countNegative < 2) {
-					votePlurality = "vote";
+				else if (results[i].option.count === 0 && largest === 0) {
+					noWinners = true;
+					tie = false;
 				}
-				message.channel.send(
-					`Hey ${message.author}, ${emojiNegative} won easily with ${countNegative} ${votePlurality}!`,
-				);
+				else if (results[i].option.count === largest) {
+					tie = true;
+					console.log(results[i].option.count, largest);
+				}
 			}
-			else {
+
+			if(tie) {
 				message.channel.send(`${message.author}, It's a tie!`);
 			}
+			else if(noWinners) {
+				message.channel.send(`lmao no one responded to your poll ${message.author}`);
+			}
+			else {
+				if (largest === 1) {votePlurality = "vote";}
+				message.channel.send(`Woah ${message.author}, ${largestEmoji} won amazingly with ${largest} ${votePlurality}!`);
+			}
+
+			console.log(`${largestEmoji.name} count: ${largest}`);
 		};
 
 		const startPoll = async () => {
 			try {
-				const { prompt, pollTime, emojiPositive, emojiNegative, cancelMessage } = await getInformation(args, Polls).catch(console.error);
+				const info = await getInformation(args, Polls).catch(console.error);
+				const prompt = info.prompt;
+				const pollTime = info.pollTime;
+				const options = info.options;
+				let cancelMessage = info.cancelMessage;
+				// I don't think I can just use a destructuring assignment here because I need both const and let variables.
 
-				if (pollTime === 0) {
+				if (pollTime < minPollTime * 1000) {
+					cancelMessage = true;
+					message.channel.send(
+						`Sorry ${message.author}, but the poll must run for at least ${minPollTime} seconds.`,
+					);
+				}
+				if (pollTime !== pollTime) {
+					cancelMessage = true;
 					message.channel.send(
 						`Sorry ${message.author}, but the correct usage is \`${prefix}${this.name} ${this.usage}\``,
 					);
 				}
-				else if (cancelMessage === true) {
+				if (cancelMessage === true) {
 					// needed in order for a message not to be sent in case if the user sees an error.
 					// Do nothing
 				}
 				else {
-					const filterPositive = (reaction) =>
-						reaction.emoji.name === emojiPositive.name;
-					const filterNegative = (reaction) =>
-						reaction.emoji.name === emojiNegative.name;
-
-					let countPositive = 0;
-					let countNegative = 0;
-
 					message.channel.send(prompt).then(async (sentMessage) => {
-						await sentMessage.react(emojiPositive);
-						await sentMessage.react(emojiNegative);
-						const positiveCollector = sentMessage.createReactionCollector(
-							filterPositive,
-							{ time: pollTime },
-						);
-						const negativeCollector = sentMessage.createReactionCollector(
-							filterNegative,
-							{ time: pollTime },
-						);
+						// == pre poll ==
+						const results = [];
+						let running = false;
 
-						// updates isRunningPoll so the user can't start another one until the current is overs
-						await Polls.update(
-							{ isRunningPoll: true },
-							{ where: { user: message.author.username } },
-						);
+						const afterVote = () => {
+							if (!running) {
+								running = true;
+								setTimeout(async (
+								) => {
+									Polls.update({ isRunningPoll: false }, { where: { user: message.author.username } })
+									.catch(console.error);
+									calculateVote(results);
+									// send object with all options with their final counts
+								}, pollTime);
+							}
+						};
 
-						positiveCollector.on("collect", async () => {
-							countPositive++;
-						});
-						negativeCollector.on("collect", () => {
-							countNegative++;
-						});
-						positiveCollector.on("end", async () => {
-							await Polls.update(
-								{ isRunningPoll: false },
-								{ where: { user: message.author.username } },
-							);
-						});
+						await Polls.update({ isRunningPoll: true }, { where: { user: message.author.username } });
+						// == start poll ==
+						options.forEach(async element => {
+							const emoji = message.guild.emojis.cache.find((object) => object.name === element);
+							const filter = (reaction) => reaction.emoji.name === emoji.name;
+							const collector = sentMessage.createReactionCollector(filter, { time: pollTime });
+							let count = 0;
 
-						negativeCollector.on("end", () => calculateVote(countPositive, countNegative, emojiPositive, emojiNegative));
+							await sentMessage.react(emoji);
+							collector.on("collect", async () => {
+								count++;
+							});
+							collector.on("end", async () => {
+								console.log(`${emoji.name} collector ended`);
+								console.log(`${emoji.name} count: ${count}`);
+								const object = {};
+								object.emoji = emoji;
+								object.count = count;
+								results.push({ option: object });
+							});
+							// == post poll ==
+							afterVote();
+						});
 					});
 				}
 			} catch (e) {
@@ -134,6 +163,6 @@ module.exports = {
 			}
 		};
 
-		startPoll(args, Polls).catch(console.error);
+		startPoll(args, Polls);
 	},
 };

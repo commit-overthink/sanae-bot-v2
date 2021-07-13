@@ -24,7 +24,9 @@ token: (string) the bot's token for connecting to Discord
 
 defaultCooldown: (int) default command cooldown
 
-maxPollTime: (int) maximum time poll-start can be run for
+minPollTime: (int) minimum seconds poll-start can be run for
+
+maxPollTime: (int) maximum seconds poll-start can be run for
 
 ## Command metadata
 

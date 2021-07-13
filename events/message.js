@@ -1,8 +1,8 @@
-const { prefix, token, defaultCooldown } = require('../config.json');
-const Discord = require('discord.js');
+const { prefix, defaultCooldown } = require("../config.json");
+const Discord = require("discord.js");
 
 module.exports = {
-	name: 'message',
+	name: "message",
 	execute(message, Polls) {
 		if (!message.content.startsWith(prefix) || message.author.bot) return;
 
@@ -13,13 +13,13 @@ module.exports = {
 		const command =
       message.client.commands.get(commandName) ||
       message.client.commands.find(
-      	(cmd) => cmd.aliases && cmd.aliases.includes(commandName),
+	(cmd) => cmd.aliases && cmd.aliases.includes(commandName),
       );
 
 		if (!command) return;
 
-		if (command.guildOnly && message.channel.type === 'dm') {
-			return message.reply('Sorry! You can\'t use that command in the DMs!');
+		if (command.guildOnly && message.channel.type === "dm") {
+			return message.reply("Sorry! You can't use that command in the DMs!");
 		}
 
 		if (command.args && !args.length) {
@@ -44,10 +44,10 @@ module.exports = {
 			const expirationTime = timestamps.get(message.author.id) + cooldownAmount;
 			if (now < expirationTime) {
 				const timeLeft = (expirationTime - now) / 1000;
-				let multipleSeconds = 'seconds';
+				let multipleSeconds = "seconds";
 
 				if (timeLeft < 1) {
-					multipleSeconds = 'second';
+					multipleSeconds = "second";
 				}
 
 				return message.channel.send(

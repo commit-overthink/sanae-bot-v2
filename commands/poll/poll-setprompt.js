@@ -7,10 +7,9 @@ module.exports = {
 	async execute(message, args, Polls) {
 		let promptDescription = args.join(" ");
 		promptDescription = promptDescription.toString();
-		// Weird capitalization, but I needed to pass the capitalized version through to this file somehow.
 		const user = message.author.username;
 
-		async function checkIfPollExists() {
+		const checkIfPollExists = async () => {
 			const poll = await Polls.findOne({ where: { user: user } });
 			if (poll != null) {
 				return true;
@@ -18,7 +17,7 @@ module.exports = {
 			else {
 				return false;
 			}
-		}
+		};
 
 		try {
 			if (await checkIfPollExists()) {
@@ -26,20 +25,17 @@ module.exports = {
 					{ prompt: promptDescription },
 					{ where: { user: user } },
 				);
-				return message.reply(`Prompt is set to \`${promptDescription}\``);
+				return message.channel.send(`*${message.author}, your poll's prompt is set to:* ${promptDescription}`);
 			}
 			else {
-				const poll = await Polls.create({
+				await Polls.create({
 					user: message.author.username,
 					prompt: promptDescription,
 				});
-				return message.reply(`Prompt is set to \`${poll.prompt}\``);
+				return message.channel.send(`*${message.author}, your poll's prompt is set to:* ${promptDescription}`);
 			}
 		}
 		catch (e) {
-			if (e === "SequelizeUniqueConstraintError") {
-				return message.reply("Sorry, but that's the current prompt.");
-			}
 			console.log(e);
 			return message.reply(
 				"Oops, something went wrong with changing the prompt.",

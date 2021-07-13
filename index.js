@@ -25,9 +25,10 @@ const Polls = sequelize.define("polls", {
   user: Sequelize.STRING,
   prompt: Sequelize.TEXT,
   isRunningPoll: {
-	type: Sequelize.BOOLEAN,
-	defaultValue: false,
+    type: Sequelize.BOOLEAN,
+    defaultValue: false,
   },
+  options: Sequelize.ARRAY(Sequelize.TEXT),
 });
 
 for (const folder of commandFolders) {
