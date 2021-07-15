@@ -1,15 +1,16 @@
 module.exports = {
   name: "ready",
   once: true,
-  async execute(client, Polls) {
+  async execute(client, Users, currency) {
     console.log(`Logged in as ${client.user.tag}.`);
 
     client.user.setActivity("you try to beat MoF stage 5", {
       type: "WATCHING",
     });
 
-    Polls.sync();
-    // Polls.sync({ force: true });
+    // Put balences for currency system in memory
+    const storedBalances = await Users.findAll();
+    storedBalances.forEach(b => currency.set(b.user_id, b));
 
     // try {
     //   let link = await client.generateInvite({

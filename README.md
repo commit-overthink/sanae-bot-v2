@@ -1,11 +1,29 @@
 ## Up next:
 
-Rolls manager or currency system.
+**Currency system**
+
+(Very) basic commands:
+
+* Balance
+* Inventory
+    * May want to make this an embed
+* Transfer
+* Buy
+* Sell
+* Shop
+    * Embed for sure
+* Leaderboard
+
+Planned features
+
+* Gambling system
+* Purchasable items
+* Purchasable roles
+* A way to earn income (still deciding on how this should be done)
 
 ## Ideas
 
 * Random quote/copypasta generator
-* Voting system for movies
 * Moderation tools (if server ever scales)
 * Gambling system, where you can bet a certain amount of currency, & a coin flip will determine whether its doubled or lost.
 * Uptime command
@@ -19,6 +37,8 @@ Rolls manager or currency system.
 ## Config.json
 
 prefix: (string) the prefix that the bot scans messages for to recieve commands
+
+currencyPrefix: (string) the prefix used for the bot's currency
 
 token: (string) the bot's token for connecting to Discord
 
@@ -44,4 +64,6 @@ cooldown: (int) sets a specific cooldown, default is in config file
 
 usage: (string) shows the command's specific usage
 
-usePolls: (boolean) defines if a command uses the Polls modal (and hence uses the database)
+usePolls: (boolean) defines if a command uses the Polls models (and hence uses the database)
+
+useCurrency: (boolean) defines if a command uses the currency models (and hence uses the database)

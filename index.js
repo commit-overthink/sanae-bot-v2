@@ -1,35 +1,40 @@
 const { token } = require("./config.json");
-const { Sequelize } = require("sequelize");
 const Discord = require("discord.js"),
   fs = require("fs");
 
 const client = new Discord.Client();
+const { Users, CurrencyShop, Polls } = require("./dbObjects");
+// const { Op } = require("sequelize");
 
 client.commands = new Discord.Collection();
 client.cooldowns = new Discord.Collection();
+const currency = new Discord.Collection();
 
 const commandFolders = fs.readdirSync("./commands");
 const eventFiles = fs
   .readdirSync("./events")
   .filter((file) => file.endsWith(".js"));
 
-const sequelize = new Sequelize("database", "user", "password", {
-  host: "localhost",
-  dialect: "sqlite",
-  logging: false,
-  storage: "database.sqlite",
-});
+  // Currency system helper methods
+  Reflect.defineProperty(currency, "add", {
+    value: async function add(id, amount) {
+      const user = currency.get(id);
+      if (user) {
+        user.balance += Number(amount);
+        return user.save();
+      }
+      const newUser = await Users.create({ user_id: id, balance: amount });
+      currency.set(id, newUser);
+      return newUser;
+    },
+  });
 
-// create schema for poll-prompt command
-const Polls = sequelize.define("polls", {
-  user: Sequelize.STRING,
-  prompt: Sequelize.TEXT,
-  isRunningPoll: {
-    type: Sequelize.BOOLEAN,
-    defaultValue: false,
-  },
-  options: Sequelize.ARRAY(Sequelize.TEXT),
-});
+  Reflect.defineProperty(currency, "getBalance", {
+    value: function getBalance(id) {
+      const user = currency.get(id);
+      return user ? user.balance : 0;
+    },
+  });
 
 for (const folder of commandFolders) {
   const commandFiles = fs
@@ -46,9 +51,9 @@ for (const folder of commandFolders) {
 for (const file of eventFiles) {
   const event = require(`./events/${file}`);
   if (event.once) {
-    client.once(event.name, (...args) => event.execute(...args, client, Polls));
+    client.once(event.name, (...args) => event.execute(...args, client, Users, currency));
   } else {
-    client.on(event.name, (...args) => event.execute(...args, Polls));
+    client.on(event.name, (...args) => event.execute(...args, Polls, Users, CurrencyShop, currency));
   }
 }
 

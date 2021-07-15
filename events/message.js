@@ -3,8 +3,10 @@ const Discord = require("discord.js");
 
 module.exports = {
 	name: "message",
-	execute(message, Polls) {
+	execute(message, Polls, Users, CurrencyShop, currency) {
 		if (!message.content.startsWith(prefix) || message.author.bot) return;
+		// Give message.author 1$ every time they use a command.
+		currency.add(message.author.id, 1);
 
 		const args = message.content.slice(prefix.length).trim().split(/ +/);
 		const commandName = args.shift().toLowerCase();
@@ -23,7 +25,7 @@ module.exports = {
 		}
 
 		if (command.args && !args.length) {
-			let reply = `Sorry! You need to provide arguments, ${message.author}!`;
+			let reply = `Sorry, but you need to provide arguments, ${message.author}!`;
 
 			if (command.usage) {
 				reply += `\nThe proper usage would be: \`${prefix}${command.name} ${command.usage}\``;
@@ -65,6 +67,10 @@ module.exports = {
 			// for poll commands
 			if (command.usePolls === true) {
 				command.execute(message, args, Polls);
+			}
+			// for currency commands
+			else if (command.useCurrency === true) {
+				command.execute(message, args, currency, Users, CurrencyShop);
 			}
 			else {
 				command.execute(message, args);
