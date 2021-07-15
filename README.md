@@ -16,12 +16,11 @@ Planned features
 
 ## Ideas
 
+* Roles manager
 * Random quote/copypasta generator
 * Moderation tools (if server ever scales)
-* Gambling system, where you can bet a certain amount of currency, & a coin flip will determine whether its doubled or lost.
 * Uptime command
 * (CURRENCY SYSTEM) buy fumo pngs in gambling system, daily commands that give allowance, redeemables (like from Twitch channel points) such as special roles, predictions (also like from twitch)
-* Roll command shows a graphic of a die.
 
 ## Notes
 
