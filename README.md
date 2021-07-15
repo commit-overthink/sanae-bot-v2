@@ -4,16 +4,7 @@
 
 (Very) basic commands:
 
-* Balance
-* Inventory
-    * May want to make this an embed
-* Transfer
 * Give
-* Buy
-* Sell
-* Shop
-    * Embed for sure
-* Leaderboard
 
 Planned features
 
