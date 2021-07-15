@@ -1,4 +1,4 @@
-const { token } = require("./config.json");
+const { token, defaultFunds } = require("./config.json");
 const Discord = require("discord.js"),
   fs = require("fs");
 
@@ -16,23 +16,37 @@ const eventFiles = fs
   .filter((file) => file.endsWith(".js"));
 
   // Currency system helper methods
+  let running = false;
+
   Reflect.defineProperty(currency, "add", {
     value: async function add(id, amount) {
-      const user = currency.get(id);
-      if (user) {
-        user.balance += Number(amount);
-        return user.save();
+      if (!running) {
+        running = true;
+        const user = currency.get(id);
+        if (user) {
+          user.balance += Number(amount);
+          running = false;
+          return user.save();
+        }
+        console.log(id, amount);
+        const newUser = await Users.create({ user_id: id, balance: amount });
+        currency.set(id, newUser);
+        running = false;
+        return newUser;
       }
-      const newUser = await Users.create({ user_id: id, balance: amount });
-      currency.set(id, newUser);
-      return newUser;
     },
   });
 
   Reflect.defineProperty(currency, "getBalance", {
     value: function getBalance(id) {
       const user = currency.get(id);
-      return user ? user.balance : 0;
+      // return user ? user.balance : 0;
+      if (user) {
+        return user.balance;
+      } else {
+        currency.add(id, defaultFunds);
+        return 10;
+      }
     },
   });
 

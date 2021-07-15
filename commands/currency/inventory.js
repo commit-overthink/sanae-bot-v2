@@ -1,3 +1,6 @@
+const Discord = require("discord.js");
+const { defaultEmbedColor } = require("../../config.json");
+
 module.exports = {
     name: "inventory",
     aliases: ["i"],
@@ -10,7 +13,14 @@ module.exports = {
         const user = await Users.findOne({ where: { user_id: target.id } });
         const items = await user.getItems();
 
-        if(!items.length) return message.channel.send(`${target.tag} has nothing!`);
-        return message.channel.send(`${target.tag} currently has ${items.map(i => `${i.amount} ${i.item.name}`).join(", ")}`);
+        if (!items.length) {
+          return message.channel.send(`${target.tag} has nothing!`);
+        } else {
+          const embed = new Discord.MessageEmbed()
+            .setColor(defaultEmbedColor)
+            .setAuthor(`${target.tag}'s Inventory`)
+            .setDescription("Owned Items\n" + items.map(i => `**${i.item.name}** — ${i.amount}\n${i.item.description}`).join("\n\n"));
+            return message.channel.send(embed);
+        }
     },
 };

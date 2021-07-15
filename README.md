@@ -8,6 +8,7 @@
 * Inventory
     * May want to make this an embed
 * Transfer
+* Give
 * Buy
 * Sell
 * Shop
@@ -18,8 +19,9 @@ Planned features
 
 * Gambling system
 * Purchasable items
-* Purchasable roles
+* Purchasable roles (that allow certain commands)
 * A way to earn income (still deciding on how this should be done)
+* Appeals system (in case if a user completely runs out of money)
 
 ## Ideas
 
@@ -42,11 +44,16 @@ currencyPrefix: (string) the prefix used for the bot's currency
 
 token: (string) the bot's token for connecting to Discord
 
+defaultEmbedColor: (string) the hex value of the default color for embed messages.
+
 defaultCooldown: (int) default command cooldown
 
 minPollTime: (int) minimum seconds poll-start can be run for
 
 maxPollTime: (int) maximum seconds poll-start can be run for
+
+defaultFunds: (int) the amount of currency every user gets by default
+
 
 ## Command metadata
 

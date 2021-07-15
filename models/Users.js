@@ -6,7 +6,7 @@ module.exports = (sequelize, DataTypes) => {
         },
         balance: {
             type: DataTypes.INTEGER,
-            defaultValue: 0,
+            defaultValue: 10,
             allowNull: false,
         },
     }, {

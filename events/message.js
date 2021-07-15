@@ -5,18 +5,23 @@ module.exports = {
 	name: "message",
 	execute(message, Polls, Users, CurrencyShop, currency) {
 		if (!message.content.startsWith(prefix) || message.author.bot) return;
-		// Give message.author 1$ every time they use a command.
-		currency.add(message.author.id, 1);
+		// Give message.author 1$ every time they use a command. currency.getBalance is called first to give user default funds.
+		// currency.getBalance(message.author.id);
+
+		if (currency.getBalance(message.author.id) === 0) {
+			currency.add(message.author.id, 10);
+			message.channel.send(`Did you really get broke while gamblig?\nYour balance: ${currency.getBalance(message.author.id)}\n`);
+		}
 
 		const args = message.content.slice(prefix.length).trim().split(/ +/);
 		const commandName = args.shift().toLowerCase();
 		const { cooldowns } = message.client;
 
 		const command =
-      message.client.commands.get(commandName) ||
-      message.client.commands.find(
-	(cmd) => cmd.aliases && cmd.aliases.includes(commandName),
-      );
+		message.client.commands.get(commandName) ||
+			message.client.commands.find(
+				(cmd) => cmd.aliases && cmd.aliases.includes(commandName),
+			);
 
 		if (!command) return;
 
@@ -45,17 +50,15 @@ module.exports = {
 		if (timestamps.has(message.author.id)) {
 			const expirationTime = timestamps.get(message.author.id) + cooldownAmount;
 			if (now < expirationTime) {
-				const timeLeft = (expirationTime - now) / 1000;
+				const timeLeft = Math.ceil((expirationTime - now) / 1000);
 				let multipleSeconds = "seconds";
 
-				if (timeLeft < 1) {
+				if (timeLeft === 1) {
 					multipleSeconds = "second";
 				}
 
 				return message.channel.send(
-					`H-hang on ${message.author}! Please wait ${timeLeft.toFixed(
-						1,
-					)} more ${multipleSeconds} before using \`${command.name}\` again.`,
+					`H-hang on ${message.author}! Please wait ${timeLeft} more ${multipleSeconds} before using \`${command.name}\` again.`,
 				);
 			}
 		}

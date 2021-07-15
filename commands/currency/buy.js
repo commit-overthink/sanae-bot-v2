@@ -10,6 +10,7 @@ module.exports = {
     usage: "<item name>",
     useCurrency: true,
     async execute(message, args, currency, Users, CurrencyShop) {
+        args = args.join(" ");
         const item = await CurrencyShop.findOne({ where: { name: { [Op.like]: args } } });
         if(!item) return message.channel.send(`Sorry ${message.author}, but that item isn't being sold in the shop!`);
         if(item.cost > currency.getBalance(message.author.id)) {

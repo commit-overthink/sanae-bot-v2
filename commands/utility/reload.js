@@ -1,8 +1,8 @@
-const fs = require('fs');
+const fs = require("fs");
 
 module.exports = {
-	name: 'reload',
-	description: 'Reloads a command.',
+	name: "reload",
+	description: "Reloads a command.",
 	args: true,
 	execute(message, args) {
 		const commandName = args[0].toLowerCase();
@@ -10,10 +10,10 @@ module.exports = {
             || message.client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
 
 		if(!command) {
-			return message.channel.send('Sorry, that\'s not a command!');
+			return message.channel.send("Sorry, that's not a command!");
 		}
 
-		const commandFolders = fs.readdirSync('./commands');
+		const commandFolders = fs.readdirSync("./commands");
 		const folderName = commandFolders.find(folder => fs.readdirSync(`./commands/${folder}`).includes(`${command.name}.js`));
 
 		delete require.cache[require.resolve(`../${folderName}/${commandName}.js`)];

@@ -4,6 +4,9 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
             unqiue: true,
         },
+        description: {
+            type: DataTypes.TEXT,
+        },
         cost: {
             type: DataTypes.INTEGER,
             allowNull: false,
