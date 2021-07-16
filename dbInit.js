@@ -16,8 +16,10 @@ const force = process.argv.includes("--force") || process.argv.includes("-f");
 
 sequelize.sync({ force }).then(async () => {
     const shop = [
-        CurrencyShop.upsert({ name: "Yuyuko Fumo", description: "A totally normal fumo. Throw your wallet at it to buy.", cost: 60 }),
-        CurrencyShop.upsert({ name: "Reimu Fumo", description: "The one and only.", cost: 70 }),
+        CurrencyShop.upsert({ name: "Yuyuko Fumo", description: "The superior fumo. Throw your wallet at it to buy.", cost: 1000 }),
+        CurrencyShop.upsert({ name: "Reimu Fumo", description: "A real classic.", cost: 70 }),
+        CurrencyShop.upsert({ name: "Youmu Fumo", description: "A real classic.", cost: 70 }),
+        CurrencyShop.upsert({ name: "Sakuya Fumo", description: "A real classic.", cost: 70 }),
         CurrencyShop.upsert({ name: "Honey", description: "Yum", cost: 2 }),
     ];
     await Promise.all(shop);
