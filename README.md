@@ -1,26 +1,5 @@
-## Up next:
-
-**Currency system**
-
-(Very) basic commands:
-
-* Give
-
-Planned features
-
-* Gambling system
-* Purchasable items
-* Purchasable roles (that allow certain commands)
-* A way to earn income (still deciding on how this should be done)
-* Appeals system (in case if a user completely runs out of money)
-
-## Ideas
-
-* Roles manager
-* Random quote/copypasta generator
-* Moderation tools (if server ever scales)
-* Uptime command
-* (CURRENCY SYSTEM) buy fumo pngs in gambling system, daily commands that give allowance, redeemables (like from Twitch channel points) such as special roles, predictions (also like from twitch)
+# Sanae Bot
+A discord bot that I use in private servers for fun. The roadmap has been moved to the Projects tab.
 
 ## Notes
 
