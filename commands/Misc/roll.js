@@ -24,6 +24,6 @@ module.exports = {
 		let number = Math.floor(Math.random() * (max - min + 1) + min);
 		if (number === 69) number = "69 :flushed:";
 
-		message.channel.send(number);
+		message.channel.send(`${number}`);
 	},
 };

@@ -1,5 +1,5 @@
 const { prefix, defaultCooldown } = require("../config.json");
-const { Client, Collection } = require("discord.js");
+const { Collection } = require("discord.js");
 
 module.exports = {
 	name: "messageCreate",

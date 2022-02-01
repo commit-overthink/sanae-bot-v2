@@ -31,7 +31,10 @@ module.exports = {
 
 			// data.push(commands.map(command => command.name).join(", "));
 
-			return message.channel.send(data, { split: true });
+            for (const line in data) {
+                message.channel.send(data[line]);
+            }
+            return null;
 		}
 
 		const name = args[0].toLowerCase();
@@ -47,6 +50,10 @@ module.exports = {
 		if (command.usage) data.push(`**Usage:** ${prefix}${command.name} ${command.usage}`);
 		data.push(`**Cooldown:** ${command.cooldown || 3} seconds`);
 
-		message.channel.send(data, { split: true });
+        for (const line in data) {
+            message.channel.send(data[line]);
+        }
+        return null;
+
 	},
 };

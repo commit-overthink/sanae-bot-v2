@@ -2,7 +2,8 @@ const { token, defaultFunds } = require("./config.json");
 const { Client, Collection, Intents } = require("discord.js"),
   fs = require("fs");
 
-const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES] });
+const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_MESSAGE_REACTIONS] });
+
 const { Users, CurrencyShop, Polls } = require("./dbObjects");
 // const { Op } = require("sequelize");
 
@@ -61,7 +62,6 @@ for (const folder of commandFolders) {
     client.commands.set(command.name, command);
   }
 }
-
 for (const file of eventFiles) {
   const event = require(`./events/${file}`);
   if (event.once) {

@@ -11,6 +11,6 @@ module.exports = {
 			.setDescription(
 				"Bot made by @phoen1x239#9739,\nplease DM me for command ideas.\nType s!help to see a list of commands.",
 			);
-		message.channel.send(embed);
+        message.channel.send({ embeds: [embed] });
 	},
 };

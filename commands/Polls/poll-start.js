@@ -43,7 +43,6 @@ module.exports = {
 					.setDescription(poll.prompt)
 					;
 					options = poll.options;
-                    console.log(options);
 					// options = poll.options.split(",");
 					// when options is read from the database, it is a string, so it needs to be parsed.
 					isRunningPoll = poll.isRunningPoll;
@@ -132,7 +131,9 @@ module.exports = {
 				const info = await getInformation(args, Polls).catch(console.error);
 				const embed = info.embed;
 				const pollTime = info.pollTime;
-				const options = info.options;
+				let options = info.options;
+                options = options.split(",");
+                console.log(options)
 				let cancelMessage = info.cancelMessage;
 				// I don't think I can just use a destructuring assignment here because I need both const and let variables.
 
@@ -187,19 +188,22 @@ module.exports = {
 						// == start poll ==
 						options.forEach(async element => {
 							const { emoji, filter } = getEmojis(element);
-							const collector = sentMessage.createReactionCollector(filter, { time: pollTime });
+							const collector = sentMessage.createReactionCollector({ filter, time: pollTime });
 							let count = 0;
 
 							await sentMessage.react(emoji);
-							collector.on("collect", async () => {
+							collector.on("collect", () => {
 								count++;
+                                console.log(count);
 							});
-							collector.on("end", async () => {
+							collector.on("end", () => {
 								const object = {};
 								object.emoji = emoji;
 								object.count = count;
+                                console.log(object);
 								results.push({ option: object });
-							});
+                            console.log(results);
+							})
 							// == post poll ==
 							afterVote();
 						});
