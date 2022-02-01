@@ -67,10 +67,11 @@ module.exports = {
           user: message.author.username,
           options: options,
         });
-        await Polls.findOne({
+        const tempPoll = await Polls.findOne({
           where: { user: message.author.username },
         });
 
+        console.log(tempPoll);
         return message.channel.send(`${message.author}, your poll's options are set to ${emojis}`);
       }
     };

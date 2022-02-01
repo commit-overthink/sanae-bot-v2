@@ -1,8 +1,8 @@
 const { prefix, defaultCooldown } = require("../config.json");
-const Discord = require("discord.js");
+const { Client, Collection } = require("discord.js");
 
 module.exports = {
-	name: "message",
+	name: "messageCreate",
 	execute(message, Polls, Users, CurrencyShop, currency) {
 		if (!message.content.startsWith(prefix) || message.author.bot) return;
 		// Give message.author 1$ every time they use a command. currency.getBalance is called first to give user default funds.
@@ -10,7 +10,7 @@ module.exports = {
 
 		if (currency.getBalance(message.author.id) === 0) {
 			currency.add(message.author.id, 10);
-			message.channel.send(`Did you really get broke while gamblig?\nYour balance: ${currency.getBalance(message.author.id)}\n`);
+			message.channel.send(`Did you really get broke while gambling?\nYour balance: ${currency.getBalance(message.author.id)}\n`);
 		}
 
 		const args = message.content.slice(prefix.length).trim().split(/ +/);
@@ -40,7 +40,7 @@ module.exports = {
 		}
 
 		if (!cooldowns.has(command.name)) {
-			cooldowns.set(command.name, new Discord.Collection());
+			cooldowns.set(command.name, new Collection());
 		}
 
 		const now = Date.now();

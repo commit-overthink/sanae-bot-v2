@@ -1,14 +1,14 @@
 const { token, defaultFunds } = require("./config.json");
-const Discord = require("discord.js"),
+const { Client, Collection, Intents } = require("discord.js"),
   fs = require("fs");
 
-const client = new Discord.Client();
+const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES] });
 const { Users, CurrencyShop, Polls } = require("./dbObjects");
 // const { Op } = require("sequelize");
 
-client.commands = new Discord.Collection();
-client.cooldowns = new Discord.Collection();
-const currency = new Discord.Collection();
+client.commands = new Collection();
+client.cooldowns = new Collection();
+const currency = new Collection();
 
 const commandFolders = fs.readdirSync("./commands");
 const eventFiles = fs
@@ -65,7 +65,7 @@ for (const folder of commandFolders) {
 for (const file of eventFiles) {
   const event = require(`./events/${file}`);
   if (event.once) {
-    client.once(event.name, (...args) => event.execute(...args, client, Users, currency));
+    client.once(event.name, (...args) => event.execute(client, Users, currency));
   } else {
     client.on(event.name, (...args) => event.execute(...args, Polls, Users, CurrencyShop, currency));
   }

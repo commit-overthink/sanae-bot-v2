@@ -26,6 +26,7 @@ module.exports = {
 				let isRunningPoll = false;
 				let cancelMessage = false;
 				const poll = await Polls.findOne({ where: { user: message.author.username } });
+                console.log(poll);
 
 				if (pollTime >= maxPollTime * 1000) {
 					cancelMessage = true;
@@ -41,7 +42,9 @@ module.exports = {
 					.setTitle(`${message.author.username}'s poll:`)
 					.setDescription(poll.prompt)
 					;
-					options = poll.options.split(",");
+					options = poll.options;
+                    console.log(options);
+					// options = poll.options.split(",");
 					// when options is read from the database, it is a string, so it needs to be parsed.
 					isRunningPoll = poll.isRunningPoll;
 				}
@@ -150,7 +153,7 @@ module.exports = {
 					// Do nothing
 				}
 				else {
-					message.channel.send(embed).then(async (sentMessage) => {
+                    message.channel.send({ embeds: [embed] }).then(async (sentMessage) => {
 						// == pre poll ==
 						const results = [];
 						let running = false;

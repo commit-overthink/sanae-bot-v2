@@ -13,12 +13,12 @@ module.exports = {
     storedBalances.forEach(b => currency.set(b.user_id, b));
 
     // try {
-    //   let link = await client.generateInvite({
-    //     permissions: ["ADMINISTRATOR"],
-    //   });
-    //   console.log(`Here's the invite Phoenix! ${link}`);
+    //    let link = await client.generateInvite({
+    //      permissions: ["ADMINISTRATOR"],
+    //    });
+    //    console.log(`Here's the invite Phoenix! ${link}`);
     // } catch (e) {
-    //   console.log(e.stack);
+    //    console.log(e.stack);
     // }
   },
 };
