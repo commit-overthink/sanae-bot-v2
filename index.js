@@ -2,7 +2,7 @@ const { token, defaultFunds } = require("./config.json");
 const { Client, Collection, Intents } = require("discord.js"),
   fs = require("fs");
 
-const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_MESSAGE_REACTIONS] });
+const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_MESSAGE_REACTIONS, Intents.FLAGS.GUILD_VOICE_STATES] });
 
 const { Users, CurrencyShop, Polls } = require("./dbObjects");
 // const { Op } = require("sequelize");
