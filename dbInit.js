@@ -32,7 +32,7 @@ sequelize.sync({ force }).then(async () => {
         CurrencyShop.upsert({ name: "Mystia's Box of Fried Eels", description: "Cures night-blindness (supposedly)", cost: 600}),
         CurrencyShop.upsert({ name: "Reisen Bunny Cap", description: "Mad as a hatter!", cost: 1000 }),
         CurrencyShop.upsert({ name: "False Moon", description: "Whoa. One helluva souvenir.", cost: 1000000000 }),
-        CurrencyShop.upsert({ name: "Strange Communications Device", description: "Found near a geyser. Smells like Phoenix's tears.", cost: 500}),
+        CurrencyShop.upsert({ name: "Strange Communications Device", description: "Found near a geyser. Smells like Chris's tears.", cost: 500}),
         CurrencyShop.upsert({ name: "Flandre Cola", description: "https://www.youtube.com/watch?v=dNKMUiB-vKw", cost: 500 }),
         CurrencyShop.upsert({ name: "Alice's Doll", description: "It's power is only 28.5714% as much as yours.", cost: 285714 }),
     ];  
