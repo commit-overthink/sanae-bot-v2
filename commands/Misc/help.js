@@ -37,7 +37,6 @@ module.exports = {
 			}
 
 			// data.push(commands.map(command => command.name).join(", "));
-            console.log(embed);
             message.channel.send({ embeds: [embed] });
 
 		}
