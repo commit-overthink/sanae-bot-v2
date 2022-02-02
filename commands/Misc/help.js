@@ -1,5 +1,6 @@
-const { prefix } = require("../../config.json");
+const { prefix, defaultEmbedColor } = require("../../config.json");
 const fs = require("fs");
+const Discord = require("discord.js");
 
 module.exports = {
 	name: "help",
@@ -7,14 +8,15 @@ module.exports = {
 	aliases: ["commands", "h"],
 	usage: "<command name>",
 	execute(message, args) {
-		const data = [];
+        let embed = new Discord.MessageEmbed()
+            .setColor(defaultEmbedColor)
+        ;
 		const { commands } = message.client;
 
 		if(!args.length) {
 			const commandFolders = fs.readdirSync("./commands");
 			let commandFiles;
 
-			data.push(`Use \`${prefix}help <command name>\` to get more info about a specific command.`);
 			for (const folder of commandFolders) {
 				const commandNames = [];
 				commandFiles = fs
@@ -26,34 +28,35 @@ module.exports = {
 					const found = commands.find(command => command.name === fileName);
 					commandNames.push(found.name);
 				}
-				data.push(`__**${folder}**__\n${commandNames.join("  ")}`);
+				const fieldTitle = `${folder}`;
+                const fieldInfo = `${commandNames.join(", ")}`;
+                embed = embed.addField(fieldTitle, fieldInfo)
+                    .setTitle(`*"Help!"*`)
+                    .setDescription(`Use \`${prefix}help <command name>\` to get more info about a specific command.`);
+                ;
 			}
 
 			// data.push(commands.map(command => command.name).join(", "));
+            console.log(embed);
+            message.channel.send({ embeds: [embed] });
 
-            for (const line in data) {
-                message.channel.send(data[line]);
+		}
+
+        else {
+		    const name = args[0].toLowerCase();
+		    const command = commands.get(name) || commands.find(c => c.aliases && c.aliases.includes(name));
+
+		    if(!command) {
+		    	return message.reply("Sorry, that's not a command!");
+		    }
+
+            embed = embed.setTitle(`Help: *${command.name}*`);
+		    if (command.aliases) embed = embed.addField(`Aliases`, `${command.aliases.join(", ")}`);
+		    if (command.description) embed = embed.addField(`Description`, `${command.description}`);
+		    if (command.usage) embed = embed.addField(`Usage`, `\`${prefix}${command.name} ${command.usage}\``);
+		    embed = embed.addField(`Cooldown`, `${command.cooldown || 3} seconds`);
+
+            message.channel.send({ embeds: [embed] });
             }
-            return null;
-		}
-
-		const name = args[0].toLowerCase();
-		const command = commands.get(name) || commands.find(c => c.aliases && c.aliases.includes(name));
-
-		if(!command) {
-			return message.reply("Sorry, that's not a command!");
-		}
-
-		data.push(`**Name:** ${command.name}`);
-		if (command.aliases) data.push(`**Aliases:** ${command.aliases.join(", ")}`);
-		if (command.description) data.push(`**Description:** ${command.description}`);
-		if (command.usage) data.push(`**Usage:** ${prefix}${command.name} ${command.usage}`);
-		data.push(`**Cooldown:** ${command.cooldown || 3} seconds`);
-
-        for (const line in data) {
-            message.channel.send(data[line]);
-        }
-        return null;
-
 	},
 };

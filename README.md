@@ -1,4 +1,4 @@
-# Sanae Bot
+# Sanae 
 A discord bot that I use in private servers for fun. The roadmap has been moved to the Projects tab.
 
 ## Notes
@@ -9,7 +9,7 @@ A discord bot that I use in private servers for fun. The roadmap has been moved 
 
 prefix: (string) the prefix that the bot scans messages for to recieve commands
 
-currencyPrefix: (string) the prefix used for the bot's currency
+currencyPrefix: (string) the prefix used for Sanae's currency system
 
 token: (string) the bot's token for connecting to Discord
 
