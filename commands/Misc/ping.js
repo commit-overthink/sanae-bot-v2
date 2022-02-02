@@ -1,6 +1,7 @@
 module.exports = {
 	name: "ping",
 	description: "Ping!",
+    aliases: ["uptime", "up", "pong"],
 	execute(message) {
         const getUpTime = () => {
             const uptime = process.uptime();

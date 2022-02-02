@@ -9,6 +9,7 @@ module.exports = {
 		const command = message.client.commands.get(commandName)
             || message.client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
 
+        console.log(command);
 		if(!command) {
 			return message.channel.send("Sorry, that's not a command!");
 		}
@@ -16,10 +17,10 @@ module.exports = {
 		const commandFolders = fs.readdirSync("./commands");
 		const folderName = commandFolders.find(folder => fs.readdirSync(`./commands/${folder}`).includes(`${command.name}.js`));
 
-		delete require.cache[require.resolve(`../${folderName}/${commandName}.js`)];
+		delete require.cache[require.resolve(`../${folderName}/${command.name}.js`)];
 
 		try {
-			const newCommand = require(`../${folderName}/${commandName}.js`);
+			const newCommand = require(`../${folderName}/${command.name}.js`);
 			message.client.commands.set(newCommand.name, newCommand);
 			message.channel.send(`The command \`${newCommand.name}\` was reloaded.`);
 		}

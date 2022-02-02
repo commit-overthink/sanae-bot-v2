@@ -17,6 +17,6 @@ module.exports = {
           //   { name: "Description", value: `${items.map(item => item.description).join("\n")}`, inline: true },
           // );
           .setDescription(items.map(item => `**${item.name}** — ${currencyPrefix}${item.cost}\n${item.description}`).join("\n\n"));
-        return message.channel.send(embed);
+        return message.channel.send({ embeds: [embed] });
     },
 };

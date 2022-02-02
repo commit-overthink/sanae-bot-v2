@@ -1,6 +1,5 @@
 const Discord = require("discord.js");
-const { defaultEmbedColor } = require("../../config.json");
-const { currencyPrefix } = require("../../config.json");
+const { currencyPrefix, defaultEmbedColor } = require("../../config.json");
 
 module.exports = {
     name: "inventory",
@@ -17,14 +16,17 @@ module.exports = {
         if (!items.length) {
           return message.channel.send(`${target.username} has nothing!`);
         } else {
-          const embed = new Discord.MessageEmbed()
+          let embed = new Discord.MessageEmbed()
             .setColor(defaultEmbedColor)
             .setAuthor(`${target.username}'s Inventory`)
-            .setDescription(
-              "Owned Items\n"
-              + items.map(i => `**${i.item.name}** — ${i.amount}\n${i.item.description}`).join("\n\n")
-              + `\n\n**Wallet** — ${currencyPrefix}${currency.getBalance(target.id)}`);
-            return message.channel.send(embed);
+            ;
+          
+            items.map(i => {
+                embed.addField(`${i.item.name}`, `Cost: ${currencyPrefix}${i.amount}\n${i.item.description}`)
+            })
+            embed = embed.addField(`Wallet`, `${currencyPrefix}${currency.getBalance(target.id)}`);
+            
+            return message.channel.send({ embeds: [embed] });
         }
     },
 };

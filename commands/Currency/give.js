@@ -14,7 +14,7 @@ module.exports = {
         return message.channel.send(`Sorry ${message.author}, but you must tell me who to give the item to!`);
       } else {
         const giveItem = args.filter(a => a !== `<@!${giveTarget.id}>`);
-        console.log(giveTarget, giveItem);
+        message.channel.send("Ah, it looks this command is in development... so please try again later")
       }
 ;    },
 };

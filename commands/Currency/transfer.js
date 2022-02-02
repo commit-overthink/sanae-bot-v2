@@ -20,6 +20,7 @@ module.exports = {
         currency.add(message.author.id, -transferAmount);
         currency.add(transferTarget.id, transferAmount);
 
-        return message.channel.send(`Successfully transferred ${currencyPrefix}${transferAmount} to ${transferTarget.tag}. Your current balance is now ${currencyPrefix}${currency.getBalance(message.author.id)}`);
+        if (transferTarget.id === `827356930132803655`) message.channel.send(`Thanks for the donation!`);
+        return message.channel.send(`Successfully transferred ${currencyPrefix}${transferAmount} to ${transferTarget.tag}. Your current balance is now ${currencyPrefix}${currency.getBalance(message.author.id)}.`);
     },
 };

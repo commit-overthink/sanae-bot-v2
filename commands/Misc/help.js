@@ -5,7 +5,7 @@ const Discord = require("discord.js");
 module.exports = {
 	name: "help",
 	description: "A list of all of the commands you can use, or info about a certain command.",
-	aliases: ["commands", "h"],
+	aliases: ["commands", "commands", "commandslist", "commandlist", "h"],
 	usage: "<command name>",
 	execute(message, args) {
         let embed = new Discord.MessageEmbed()
