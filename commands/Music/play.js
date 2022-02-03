@@ -5,7 +5,7 @@ const { join } = require("path");
 module.exports = {
     name: "play",
     description: "Plays music. Make sure you're in a VC",
-    aliases: ["p"],
+    aliases: ["join", "p"],
     execute(message, args) {
         const channel = message.member.voice;
         const joinVC = joinVoiceChannel({
@@ -16,11 +16,12 @@ module.exports = {
 
         const connection = getVoiceConnection(channel.guild.id);
 
-        let resource = createAudioResource(createReadStream(join(__dirname, "../../music/Prayerblue.webm")),{
-            inlineVolume: true
-        });
+        // Don't create another subscription if it already exists
+        if(connection.state.subscription){
+            return message.channel.send("Akyuu is already playing the music!");
+        }
 
-        resource.volume.setVolume(0.2);
+        let resource = createAudioResource(createReadStream(join(__dirname, "../../music/Prayerblue.webm")));
 
         const player = createAudioPlayer();
         connection.subscribe(player);
