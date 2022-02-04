@@ -36,7 +36,6 @@ module.exports = {
                 duration = durationMinutes;
             }
 
-            console.log(metadata);
             const embed = new Discord.MessageEmbed()
                 .setColor(defaultEmbedColor)
                 .setTitle(`*"Now playing!"*`)
