@@ -2,7 +2,7 @@ const { getVoiceConnection } = require(`@discordjs/voice`);
 
 module.exports = {
     name: "stop",
-    description: "also temp",
+    description: "Stops the music, you don't want your parents to hear this kind of stuff... right?",
     aliases: ["disconnect", "leave", "quit"],
     execute(message, args) {
         const channel = message.member.voice;
