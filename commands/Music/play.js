@@ -51,6 +51,20 @@ module.exports = {
                 ;
             return embed;
         }
+        const addSongToQueue = (song) => {
+            if (musicQueue === undefined) {
+                let musicQueue = {
+                    songs: [song],
+                    isPlaying: false,
+                    isRepeating: false,
+                };
+            } else {
+                let musicQueue = message.musicQueue.get(message.guild.id);
+            }
+            console.log(musicQueue);
+            musicQueue.set(message.guild.id, musicQueue);
+        }
+        console.log(addSongToQueue("test"));
 
         // Check to see if the song exists
         metadata = await getMetadata(args[0]);

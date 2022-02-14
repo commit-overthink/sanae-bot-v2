@@ -19,7 +19,8 @@ module.exports = {
 					})}`;
 				}
 			});
-			return message.channel.send(avatarList);
+            console.log(avatarList);
+            return message.channel.send(`${avatarList}`);
 		}
 
 		return message.channel.send(message.author.avatarURL({ format: "jpg", size: 256 }));
