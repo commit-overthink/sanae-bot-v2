@@ -43,3 +43,5 @@ usage: (string) shows the command's specific usage
 usePolls: (boolean) defines if a command uses the Polls models (and hence uses the database)
 
 useCurrency: (boolean) defines if a command uses the currency models (and hence uses the database)
+
+useMusic: (boolean) defines if a command uses the Music model (and hence uses the database)
