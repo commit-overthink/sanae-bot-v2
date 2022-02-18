@@ -29,7 +29,6 @@ const eventFiles = fs
           running = false;
           return user.save();
         }
-        console.log(id, amount);
         const newUser = await Users.create({ user_id: id, balance: amount });
         currency.set(id, newUser);
         running = false;
