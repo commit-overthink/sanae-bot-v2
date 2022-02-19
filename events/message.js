@@ -50,15 +50,34 @@ module.exports = {
 		if (timestamps.has(message.author.id)) {
 			const expirationTime = timestamps.get(message.author.id) + cooldownAmount;
 			if (now < expirationTime) {
-				const timeLeft = Math.ceil((expirationTime - now) / 1000);
-				let multipleSeconds = "seconds";
-
-				if (timeLeft === 1) {
-					multipleSeconds = "second";
+				const timeLeftSeconds = Math.ceil((expirationTime - now) / 1000);
+				const getTimeLeft = () => {
+					const seconds = Math.floor(timeLeftSeconds % 60);
+					const minutes = Math.floor(timeLeftSeconds % (60*60) / 60);
+					const hours = Math.floor((timeLeftSeconds / (60*60)) % 24);
+					const days = Math.floor(timeLeftSeconds / (60*60*24));
+					return ({ seconds, minutes, hours, days });
 				}
-
+				const timeLeft = getTimeLeft();
+				let pluralS = "";
+				let pluralM = "";
+				let pluralH = "";
+				let pluralD = "";
+		
+				if (timeLeft.seconds > 1 || timeLeft.seconds === 0) {
+					pluralS = "s";
+				}
+				if (timeLeft.minutes > 1 || timeLeft.minutes === 0) {
+					pluralM = "s";
+				}
+				if (timeLeft.hours > 1 || timeLeft.hours === 0) {
+					pluralH = "s";
+				}
+				if (timeLeft.days > 1 || timeLeft.days === 0) {
+					pluralD = "s";
+				}
 				return message.channel.send(
-					`H-hang on ${message.author}! Please wait ${timeLeft} more ${multipleSeconds} before using \`${command.name}\` again.`,
+					`H-hang on ${message.author}! This command is on cooldown! Please wait ${timeLeft.seconds} second${pluralS}, ${timeLeft.minutes} minute${pluralM}, ${timeLeft.hours} hour${pluralH}, and ${timeLeft.days} day${pluralD} before using \`${command.name}\` again.`,
 				);
 			}
 		}
