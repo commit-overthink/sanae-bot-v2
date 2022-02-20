@@ -63,26 +63,25 @@ module.exports = {
           return { seconds, minutes, hours, days };
         };
         const timeLeft = getTimeLeft();
+
         let pluralS = "";
         let pluralM = "";
         let pluralH = "";
         let pluralD = "";
+        let cooldownMessage = `Hang on ${message.author}! This command is on cooldown! Please wait`;
 
-        if (timeLeft.seconds > 1 || timeLeft.seconds === 0) {
-          pluralS = "s";
-        }
-        if (timeLeft.minutes > 1 || timeLeft.minutes === 0) {
-          pluralM = "s";
-        }
-        if (timeLeft.hours > 1 || timeLeft.hours === 0) {
-          pluralH = "s";
-        }
-        if (timeLeft.days > 1 || timeLeft.days === 0) {
-          pluralD = "s";
-        }
-        return message.channel.send(
-          `H-hang on ${message.author}! This command is on cooldown! Please wait ${timeLeft.seconds} second${pluralS}, ${timeLeft.minutes} minute${pluralM}, ${timeLeft.hours} hour${pluralH}, and ${timeLeft.days} day${pluralD} before using \`${command.name}\` again.`
-        );
+        if (timeLeft.seconds > 1 || timeLeft.seconds === 0) pluralS = "s";
+        if (timeLeft.minutes > 1 || timeLeft.minutes === 0) pluralM = "s"; 
+        if (timeLeft.hours > 1 || timeLeft.hours === 0) pluralH = "s";
+        if (timeLeft.days > 1 || timeLeft.days === 0) pluralD = "s";
+
+        if (timeLeft.seconds > 0) cooldownMessage += ` ${timeLeft.seconds} second${pluralS}`;
+        if (timeLeft.minutes > 0) cooldownMessage += `, ${timeLeft.minutes} minute${pluralM}`;
+        if (timeLeft.hours > 0) cooldownMessage += `, ${timeLeft.hours} hour${pluralH}`;
+        if (timeLeft.days > 0) cooldownMessage += `, ${timeLeft.days} second${pluralD}`;
+        cooldownMessage +=  ` before using \`${command.name}\` again.`;
+
+        return message.channel.send(cooldownMessage);
       }
     }
 
