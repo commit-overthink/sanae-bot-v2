@@ -104,5 +104,5 @@ module.exports = {
 				`${message.author}! There's an error with executing this command!`,
 			);
 		}
-	},
+  },
 };

@@ -9,15 +9,19 @@
 //   });
 
 module.exports = (sequelize, DataTypes) => {
-    return sequelize.define("polls", {
-        user: DataTypes.STRING,
-        prompt: DataTypes.TEXT,
-        isRunningPoll: {
-            type: DataTypes.BOOLEAN,
-            defaultValue: false,
-        },
-        options: DataTypes.ARRAY(DataTypes.TEXT),
-    }, {
-        timestamps: false,
-    });
+  return sequelize.define(
+    "polls",
+    {
+      user: DataTypes.STRING,
+      prompt: DataTypes.TEXT,
+      isRunningPoll: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+      },
+      options: DataTypes.ARRAY(DataTypes.TEXT),
+    },
+    {
+      timestamps: false,
+    }
+  );
 };

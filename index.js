@@ -2,9 +2,16 @@ const { token, defaultFunds } = require("./config.json");
 const { Client, Collection, Intents } = require("discord.js"),
   fs = require("fs");
 
-const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_MESSAGE_REACTIONS, Intents.FLAGS.GUILD_VOICE_STATES] });
+const client = new Client({
+  intents: [
+    Intents.FLAGS.GUILDS,
+    Intents.FLAGS.GUILD_MESSAGES,
+    Intents.FLAGS.GUILD_MESSAGE_REACTIONS,
+    Intents.FLAGS.GUILD_VOICE_STATES,
+  ],
+});
 
-const { Users, CurrencyShop, Polls } = require("./dbObjects");
+const { Users, CurrencyShop, Polls, MusicQueues } = require("./dbObjects");
 // const { Op } = require("sequelize");
 
 client.commands = new Collection();
@@ -16,39 +23,39 @@ const eventFiles = fs
   .readdirSync("./events")
   .filter((file) => file.endsWith(".js"));
 
-  // Currency system helper methods
-  let running = false;
+// Currency system helper methods
+let running = false;
 
-  Reflect.defineProperty(currency, "add", {
-    value: async function add(id, amount) {
-      if (!running) {
-        running = true;
-        const user = currency.get(id);
-        if (user) {
-          user.balance += Number(amount);
-          running = false;
-          return user.save();
-        }
-        const newUser = await Users.create({ user_id: id, balance: amount });
-        currency.set(id, newUser);
-        running = false;
-        return newUser;
-      }
-    },
-  });
-
-  Reflect.defineProperty(currency, "getBalance", {
-    value: function getBalance(id) {
+Reflect.defineProperty(currency, "add", {
+  value: async function add(id, amount) {
+    if (!running) {
+      running = true;
       const user = currency.get(id);
-      // return user ? user.balance : 0;
       if (user) {
-        return user.balance;
-      } else {
-        currency.add(id, defaultFunds);
-        return 10;
+        user.balance += Number(amount);
+        running = false;
+        return user.save();
       }
-    },
-  });
+      const newUser = await Users.create({ user_id: id, balance: amount });
+      currency.set(id, newUser);
+      running = false;
+      return newUser;
+    }
+  },
+});
+
+Reflect.defineProperty(currency, "getBalance", {
+  value: function getBalance(id) {
+    const user = currency.get(id);
+    // return user ? user.balance : 0;
+    if (user) {
+      return user.balance;
+    } else {
+      currency.add(id, defaultFunds);
+      return 10;
+    }
+  },
+});
 
 for (const folder of commandFolders) {
   const commandFiles = fs
@@ -64,9 +71,13 @@ for (const folder of commandFolders) {
 for (const file of eventFiles) {
   const event = require(`./events/${file}`);
   if (event.once) {
-    client.once(event.name, (...args) => event.execute(client, Users, currency));
+    client.once(event.name, (...args) =>
+      event.execute(client, Users, currency)
+    );
   } else {
-    client.on(event.name, (...args) => event.execute(...args, Polls, Users, CurrencyShop, currency));
+    client.on(event.name, (...args) =>
+      event.execute(...args, Polls, Users, CurrencyShop, currency, MusicQueues)
+    );
   }
 }
 
