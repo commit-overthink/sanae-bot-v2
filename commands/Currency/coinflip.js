@@ -11,31 +11,36 @@ module.exports = {
     useCurrency: true,
     async execute(message, args, currency) {
         // generate true or false randomly
-    const bet = args[0];
+        const bet = args[0] * 1;
+        console.log(bet)
 	const guess = args[1];
-	let heads = true; //if the coin was heads
-	let correct = false; // Was the guess correct
+	var heads = true; //if the coin was heads
+	var correct = true; // Was the guess correct
     const max = 2
     const number = Math.floor(Math.random() * max);
 
-        if (bet > currency.getBalance(message.author.id)) {
-            return message.channel.send(`Sorry ${message.author}, but you can't make that bet since you only have ${currencyPrefix}${currency.getBalance(message.author.id)}.`);
-        }
-        if (guess === undefined)
-            return message.channel.send(`Please specify if you want heads or tails ${message.author}. Arguments are <amount> <heads or tails> `)
+//error checks
+if (bet > currency.getBalance(message.author.id)) {
+    return message.channel.send(`Sorry ${message.author}, but you can't make that bet since you only have ${currencyPrefix}${currency.getBalance(message.author.id)}.`);
+}
+if (guess === undefined) {
+    return message.channel.send(`Please specify if you want heads or tails ${message.author}. Arguments are <amount> <heads or tails> `)
+}
+if (Number.isNaN(bet) === true) {
+    return message.channel.send(`Whoops ${message.author}, please state your bet followed by heads or tails! <amount> <heads or tails>`)
+}
 	//decide if heads or tails
-	if (number === 0) {
-		heads = false;
+	if (number === 1) {
+		heads = true;
+	} else {
+		heads = false
     }
-
 	//check if correct
-	if (heads === true && guess === 'heads') {
-	    correct = true;
-	} else if (heads === false && guess === 'tails') {
-		correct = true;
-    } else {
-        correct = false;
-    }
+	if (heads === true && guess.toLowerCase() === 'tails') {
+		correct = false;
+	} else if (heads === false && guess.toLowerCase() === 'heads') {
+		correct = false;
+    } 
 	
     if (correct === true && heads === true) {
         currency.add(message.author.id, bet * 2);
@@ -49,7 +54,7 @@ module.exports = {
 	} else {
 	    currency.add(message.author.id, bet * -1);
 	    return message.channel.send(`It was tails...\nYour balance: ${currencyPrefix}${currency.getBalance(message.author.id)}`);
-    }
+        }
 
         // incorrect: double amount, give to User
         // correct: subtract amount from User
