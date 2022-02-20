@@ -10,7 +10,7 @@ module.exports = {
 
     // Put balences for currency system in memory
     const storedBalances = await Users.findAll();
-    storedBalances.forEach(b => currency.set(b.user_id, b));
+    storedBalances.forEach((b) => currency.set(b.user_id, b));
 
     // try {
     //    let link = await client.generateInvite({
