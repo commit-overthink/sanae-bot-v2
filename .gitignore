@@ -1,6 +1,5 @@
 # dependencies
 /node_modules
-/music
 # misc
 config.json
 database.sqlite
