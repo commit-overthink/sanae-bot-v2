@@ -1,4 +1,5 @@
-# Sanae 
+# Sanae
+
 A discord bot that I use in private servers for fun. The roadmap has been moved to the Projects tab.
 
 ## Notes
@@ -22,7 +23,6 @@ minPollTime: (int) minimum seconds poll-start can be run for
 maxPollTime: (int) maximum seconds poll-start can be run for
 
 defaultFunds: (int) the amount of currency every user gets by default
-
 
 ## Command metadata
 

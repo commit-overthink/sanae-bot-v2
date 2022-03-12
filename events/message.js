@@ -3,7 +3,7 @@ const { Collection } = require("discord.js");
 
 module.exports = {
   name: "messageCreate",
-  execute(message, Polls, Users, CurrencyShop, currency) {
+  execute(message, Polls, Users, CurrencyShop, currency, MusicQueues) {
     if (!message.content.startsWith(prefix) || message.author.bot) return;
     // Give message.author 1$ every time they use a command. currency.getBalance is called first to give user default funds.
     // currency.getBalance(message.author.id);
@@ -90,12 +90,15 @@ module.exports = {
 
     try {
       // for poll commands
-      if (command.usePolls === true) {
+      if (command.usePolls) {
         command.execute(message, args, Polls);
       }
       // for currency commands
-      else if (command.useCurrency === true) {
+      else if (command.useCurrency) {
         command.execute(message, args, currency, Users, CurrencyShop);
+      }
+      else if (command.useMusic) {
+        command.execute(message, args, MusicQueues)
       } else {
         command.execute(message, args);
       }

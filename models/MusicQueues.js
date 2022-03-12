@@ -5,8 +5,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    songList: Sequelize.ARRAY(Sequelize.TEXT),
-    isPlaying: Sequelize.BOOLEAN,
+    songs: Sequelize.ARRAY(Sequelize.TEXT),
     isRepeating: Sequelize.BOOLEAN,
   });
 };
