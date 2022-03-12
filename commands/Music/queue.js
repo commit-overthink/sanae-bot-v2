@@ -55,7 +55,7 @@ module.exports = {
             const embed = new Discord.MessageEmbed()
                 .setColor(defaultEmbedColor)
                 .setTitle(`*"Here's our queue!"*`)
-                .setDescription("Music from the Outside World is so different, Akyuu!")
+                .setDescription("Music from the Outside World is so different!")
             ;
 
              const firstSongInfo = await getSongInfo(queue.songs[0]);
