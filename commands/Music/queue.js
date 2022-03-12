@@ -41,14 +41,15 @@ module.exports = {
         });
 
         // make embed
-        const getSongInfo = async (url) => {                                                                          
-             let data = null;                                                                                          
-             try {                                                                                                     
-                 data = await ytdl.getBasicInfo(url);                                                                  
-             } catch (e) {                                                                                             
-                 console.log(`Error with input "${url}". Doesn't exist?`);                                             
-             }                                                                                                         
-             return data;                                                                                              
+        const getSongInfo = async (url) =>
+        {                                                                          
+            let data = null;
+            try {
+                data = await ytdl.getBasicInfo(url);
+            } catch (e) {
+                console.log(`Error with input "${url}". Doesn't exist?`);
+            }
+            return data;
         }
 
         const getEmbed = async () => {
