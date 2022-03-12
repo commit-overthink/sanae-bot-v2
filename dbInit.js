@@ -100,7 +100,7 @@ sequelize
       }),
       CurrencyShop.upsert({
         name: "Strange Communications Device",
-        description: "Found near a geyser. Smells like Chris's tears.",
+        description: "Found near a geyser.",
         cost: 500,
       }),
       CurrencyShop.upsert({
