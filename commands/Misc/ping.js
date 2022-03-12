@@ -25,7 +25,7 @@ module.exports = {
     if (timeLeft.seconds > 0) uptimeMessage += `${timeLeft.seconds} second${pluralS}`;
     if (timeLeft.minutes > 0) uptimeMessage += `, ${timeLeft.minutes} minute${pluralM}`;
     if (timeLeft.hours > 0) uptimeMessage += `, ${timeLeft.hours} hour${pluralH}`;
-    if (timeLeft.days > 0) uptimeMessage += `, ${timeLeft.days} second${pluralD}`;
+    if (timeLeft.days > 0) uptimeMessage += `, ${timeLeft.days} day${pluralD}`;
 
     message.channel
       .send(

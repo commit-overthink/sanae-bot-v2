@@ -2,7 +2,7 @@ const { currencyPrefix } = require("../../config.json");
 
 module.exports = {
   name: "coinflip",
-  aliases: ["flip", "f"],
+  aliases: ["flip", "cf"],
   cooldown: 1,
   description:
     "Flip a coin. Bet an amount of money that either doubles or is lost.",
