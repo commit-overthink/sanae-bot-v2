@@ -201,14 +201,14 @@ module.exports = {
 
           let duration = "";
 
-          if (hours > 10) duration += `${hours}:`;
+          if (hours >= 10) duration += `${hours}:`;
           else if (hours > 0 && hours < 10) duration += `0${hours}:`;
 
-          if (minutes > 10 ) duration += `${minutes}:`;
+          if (minutes >= 10 ) duration += `${minutes}:`;
           else if (minutes > 0 && minutes < 10) duration += `0${minutes}:`;
           else duration += `00:`;
 
-          if (seconds > 10) duration += `${seconds}`
+          if (seconds >= 10) duration += `${seconds}`
           else if (seconds > 0 && seconds < 10) duration += `0${seconds}`
           else duration += `00`;
                                                                                               
