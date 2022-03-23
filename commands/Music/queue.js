@@ -59,14 +59,23 @@ module.exports = {
                 .setDescription("Music from the Outside World is so different!")
             ;
 
-             const firstSongInfo = await getSongInfo(queue.songs[0]);
+            const firstSongInfo = await getSongInfo(queue.songs[0]);
                  embed.setThumbnail(
                      `https://i.ytimg.com/vi/${firstSongInfo.videoDetails.videoId}/maxresdefault.jpg`
                  );
+
+            let songPlural = "s";
+            let nextUpTitle = "";
+            let lastLine = "";
+            if (queue.songs.length == 1) songPlural = "";
+            // embed.addField(`__Now Playing__`, '\u200b');
             for (n in queue.songs) {
+                if (n == queue.songs.length - 1) lastLine = `\n**${queue.songs.length} song${songPlural} in queue**`; 
+                if (n == 0) nextUpTitle = "__Next Up__";
                 songInfo = await getSongInfo(queue.songs[n]);
-                embed.addField(`__${parseInt(n) + 1}:__`,`${songInfo.videoDetails.title}\n${songInfo.videoDetails.ownerChannelName}`);
+                embed.addField(`${nextUpTitle}\u200b`,`\`${parseInt(n) + 1}.\` [${songInfo.videoDetails.title}](${songInfo.videoDetails.video_url})${lastLine}`);
             }
+
 
             return embed;
         }
