@@ -148,7 +148,7 @@ module.exports = {
           return storedQueue;
       }
 
-      const playNextSong = async () => {
+      const playNextSong = async (firstSongDeterminer) => {
           // create queue object
           let queue = {
               songs: [],
@@ -158,18 +158,32 @@ module.exports = {
           // get stored queue
           const storedQueue = await getStoredQueue();
 
-          // stored queue will return as null if there are no songs left 
-          if (storedQueue === null) {
-              connection.destroy();
-              return message.channel.send(`Looks like there's no more songs to play, see ya ${message.member}!`);
-          }
-
           // convert to object in memory
           const convertedQueue = storedQueue.dataValues.songs.split(",");
           convertedQueue.forEach((song) => {
               queue.songs.push(song);
           });
+         
+          if (!firstSongDeterminer) {
+             queueRemove();
+             queue.songs.shift();
+          }
+
+          // stored queue will return as null if there are no songs left 
+          if (queue.songs.length === 0) {
+              connection.destroy();
+              return message.channel.send(`Looks like there's no more songs to play, see ya ${message.member}!`);
+          }
+
+          const songInfo = await getSongInfo(queue.songs[0]);
           
+          // handles non-existent videos from corrupting the database and prevents them from playing 
+          if (songInfo === null) {
+              queueRemove();
+              queue.songs.shift();
+              return connection.destroy();
+          }
+
           // use case: check for no members?
 
           // play next song in queue
@@ -182,12 +196,10 @@ module.exports = {
               inputType: StreamType.Arbitrary,
           });
 
-          const songInfo = await getSongInfo(queue.songs[0]);
           const embed = getEmbed(songInfo, `*"Now Playing!"*`);
           message.channel.send({ embeds: [embed] });
 
           player.play(resource);
-          queueRemove();
       }
 
       const getEmbed = (metadata, title) => {
@@ -261,7 +273,7 @@ module.exports = {
       // Play music
       connection.on(VoiceConnectionStatus.Ready, async () => {
           await queueAdd(args);
-          playNextSong();
+          playNextSong(true);
       });
 
       player.on(AudioPlayerStatus.Playing, () => {
