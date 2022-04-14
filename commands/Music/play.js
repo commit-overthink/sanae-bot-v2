@@ -38,7 +38,7 @@ module.exports = {
                       message.channel.send(`Sorry ${message.member}, but the song \`${input[n]}\` doesn't exist!`);
                   } else {
                       queue.songs.push(`${input[n]}`);
-                      message.channel.send(`${message.member}, I added *${songInfo.videoDetails.title}* to the queue!`);
+                      message.channel.send(`Added *${songInfo.videoDetails.title}* to the queue!`);
                   }
               }
 
@@ -63,7 +63,7 @@ module.exports = {
                       message.channel.send(`Sorry ${message.member}, but the song \`${input[n]}\` doesn't exist!`);
                   } else {
                       queue.songs.push(`${input[n]}`);
-                      message.channel.send(`${message.member}, I added *${songInfo.videoDetails.title}* to the queue!`);
+                      message.channel.send(`Added *${songInfo.videoDetails.title}* to the queue!`);
                   }
               }
               
