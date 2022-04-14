@@ -59,31 +59,22 @@ module.exports = {
                 .setDescription("Music from the Outside World is so different!")
             ;
 
-            const firstSongInfo = await getSongInfo(queue.songs[0]);
-                 embed.setThumbnail(
-                     `https://i.ytimg.com/vi/${firstSongInfo.videoDetails.videoId}/maxresdefault.jpg`
-                 );
-
             let songPlural = "s";
+            let lines = "";
             let lastLine = "";
             if (queue.songs.length == 1) songPlural = "";
-            // embed.addField(`__Now Playing__`, '\u200b');
             for (n in queue.songs) {
-                if (n < 2) {
-                    let nextUpTitle = "";
-                    if (n == 0) nextUpTitle = "__Now Playing__";
-                    if (n == 1) nextUpTitle = "__Next Up__";
-                    songInfo = await getSongInfo(queue.songs[n]);
-                    embed.addField(`${nextUpTitle}\u200b`,`\`${parseInt(n) + 1}.\` [${songInfo.videoDetails.title}](${songInfo.videoDetails.video_url})${lastLine}`);
+                songInfo = await getSongInfo(queue.songs[n]);
+                if (n == queue.songs.length - 1) {
+                    lastLine = `\n💿 **${queue.songs.length} song${songPlural} in queue**`; 
+                }
+                if (n == 0) {
+                    embed.addField(`__Now Playing__`,`\`${parseInt(n) + 1}.\` [${songInfo.videoDetails.title}](${songInfo.videoDetails.video_url})${lastLine}`);
                 } else {
-                    let lines = "";
-                    if (n == queue.songs.length - 1) lastLine = `\n**${queue.songs.length} song${songPlural} in queue**`; 
-                    // embed.addField(`${nextUpTitle}\u200b`,`\`${parseInt(n) + 1}.\` [${songInfo.videoDetails.title}](${songInfo.videoDetails.video_url})${lastLine}`);
-
+                    lines += `\n\`${parseInt(n) + 1}.\`[${songInfo.videoDetails.title}](${songInfo.videoDetails.video_url})${lastLine}`;
                 }
             }
-
-
+            if (lines.length > 0) embed.addField(`__Next Up__`, lines); 
             return embed;
         }
 
