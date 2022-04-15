@@ -59,6 +59,8 @@ module.exports = {
                 .setDescription("Music from the Outside World is so different!")
             ;
 
+            // Only allow like 10 songs to be shown max
+
             let songPlural = "s";
             let lines = "";
             let lastLine = "";

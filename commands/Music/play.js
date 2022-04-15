@@ -228,7 +228,7 @@ module.exports = {
             .setTitle(`${title}`)
             .setDescription(`**[${videoData.title}](${videoData.video_url})**`)               
             .setThumbnail(                                                                    
-              `https://i.ytimg.com/vi/${videoData.videoId}/maxresdefault.jpg`                 
+              `https://i.ytimg.com/vi/${videoData.videoId}/hqdefault.jpg`                 
             )                                                                                 
             .addFields(                                                                       
               {                                                                               
