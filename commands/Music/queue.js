@@ -64,11 +64,11 @@ module.exports = {
             let songPlural = "s";
             let lines = "";
             let lastLine = "";
-            if (queue.songs.length == 1) songPlural = "";
+            if (queue.songs.length == 2) songPlural = "";
             for (n in queue.songs) {
                 songInfo = await getSongInfo(queue.songs[n]);
                 if (n == queue.songs.length - 1) {
-                    lastLine = `\n💿 **${queue.songs.length} song${songPlural} in queue**`; 
+                    lastLine = `\n💿 **${queue.songs.length - 1} song${songPlural} in queue**`; 
                 }
                 if (n == 0) {
                     embed.addField(`__Now Playing__`,`\`${parseInt(n) + 1}.\` [${songInfo.videoDetails.title}](${songInfo.videoDetails.video_url})${lastLine}`);

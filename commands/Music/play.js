@@ -21,6 +21,22 @@ module.exports = {
   async execute(message, args, MusicQueues) {
 
       const queueAdd = async (input) => {
+          const pushToQueue = async (input) => {
+              for (n in input) {
+                  const songInfo = await getSongInfo(input[n]);
+                  if (songInfo === null) {
+                      message.channel.send(`Sorry ${message.member}, but the song \`${input[n]}\` doesn't exist!`);
+                  } else {
+                      queue.songs.push(`${input[n]}`);
+                      if (input.length === 1) {
+                          message.channel.send(`Added *${songInfo.videoDetails.title}* to the queue!`);
+                      } else if (parseInt(n) + 1 === input.length) {
+                          message.channel.send(`Added ${input.length} songs to the queue!`);
+                      }
+                  }
+             }
+          }
+
           // Create queue object
           let queue = {
               songs: [],
@@ -32,15 +48,7 @@ module.exports = {
           const storedQueue = await getStoredQueue();
           if (storedQueue === null) {
               // Check to see if songs exist, add them to the queue object.
-              for (n in input) {
-                  const songInfo = await getSongInfo(input[n]);
-                  if (songInfo === null) {
-                      message.channel.send(`Sorry ${message.member}, but the song \`${input[n]}\` doesn't exist!`);
-                  } else {
-                      queue.songs.push(`${input[n]}`);
-                      message.channel.send(`Added *${songInfo.videoDetails.title}* to the queue!`);
-                  }
-              }
+              await pushToQueue(input);
 
               // create the stored queue and push queue object to it.
               MusicQueues.create({
@@ -57,15 +65,7 @@ module.exports = {
               });
 
               // append new songs with same method as earlier.
-              for (n in input) {
-                  const songInfo = await getSongInfo(input[n]);
-                  if (songInfo === null) {
-                      message.channel.send(`Sorry ${message.member}, but the song \`${input[n]}\` doesn't exist!`);
-                  } else {
-                      queue.songs.push(`${input[n]}`);
-                      message.channel.send(`Added *${songInfo.videoDetails.title}* to the queue!`);
-                  }
-              }
+              pushToQueue(input);
               
               // send object to DB
               const promises = [];
