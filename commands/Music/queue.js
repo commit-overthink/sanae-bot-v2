@@ -104,9 +104,9 @@ module.exports = {
                     lastLine = `\n💿 **${queue.songs.length - 1} song${songPlural} in queue** | ${queueDurationStamp}`; 
                 }
                 if (n == 0) {
-                    embed.addField(`__Now Playing__`,`\`${parseInt(n) + 1}.\` [${songInfo.videoDetails.title}](${songInfo.videoDetails.video_url})${lastLine}`);
+                    embed.addField(`__Now Playing__`,`[${songInfo.videoDetails.title}](${songInfo.videoDetails.video_url})${lastLine}`);
                 } else {
-                    lines += `\n\`${parseInt(n) + 1}.\`[${songInfo.videoDetails.title}](${songInfo.videoDetails.video_url})${lastLine}`;
+                    lines += `\n\`${parseInt(n)}.\`[${songInfo.videoDetails.title}](${songInfo.videoDetails.video_url})${lastLine}`;
                 }
             }
             if (lines.length > 0) embed.addField(`__Next Up__`, lines); 

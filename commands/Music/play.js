@@ -22,6 +22,7 @@ module.exports = {
 
       const queueAdd = async (input) => {
           const pushToQueue = async (input) => {
+              console.log(input);
               for (n in input) {
                   const songInfo = await getSongInfo(input[n]);
                   if (songInfo === null) {
@@ -65,7 +66,8 @@ module.exports = {
               });
 
               // append new songs with same method as earlier.
-              pushToQueue(input);
+              await pushToQueue(input);
+              console.log(queue.songs)
               
               // send object to DB
               const promises = [];
