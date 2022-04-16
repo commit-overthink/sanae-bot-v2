@@ -52,6 +52,36 @@ module.exports = {
             return data;
         }
 
+        //=== Time ===
+        const parseTime = (time, unit) => {
+            let secInt;
+            if (unit === "ms") {
+                secInt = parseInt(time) / 1000;
+            } else {
+                secInt = parseInt(time);
+            }
+
+            let timestamp = "";
+            const s = Math.floor(secInt % 60);
+            const min = Math.floor(secInt % (60 * 60) / 60);
+            const hr = Math.floor(secInt / (60 * 60) % 24);
+            
+            // console.log(`time: ${time}, secInt: ${secInt}, sec: ${s}, min: ${min}, hr: ${hr}`);
+
+            if (hr >= 10) timestamp += `${hr}:`;
+            else if (hr > 0 && hr < 10) timestamp += `0${hr}:`;
+
+            if (min >= 10 ) timestamp += `${min}:`;
+            else if (min > 0 && min < 10) timestamp += `0${min}:`;
+            else timestamp += `00:`;
+
+            if (s >= 10) timestamp += `${s}`
+            else if (s > 0 && s < 10) timestamp += `0${s}`
+            else timestamp += `00`;
+
+            return timestamp;
+        }
+        
         const getEmbed = async () => {
             const embed = new Discord.MessageEmbed()
                 .setColor(defaultEmbedColor)
@@ -62,13 +92,16 @@ module.exports = {
             // Only allow like 10 songs to be shown max
 
             let songPlural = "s";
+            let queueDuration = 0;
             let lines = "";
             let lastLine = "";
             if (queue.songs.length == 2) songPlural = "";
             for (n in queue.songs) {
                 songInfo = await getSongInfo(queue.songs[n]);
+                queueDuration += parseInt(songInfo.videoDetails.lengthSeconds);
                 if (n == queue.songs.length - 1) {
-                    lastLine = `\n💿 **${queue.songs.length - 1} song${songPlural} in queue**`; 
+                    queueDurationStamp = parseTime(queueDuration);
+                    lastLine = `\n💿 **${queue.songs.length - 1} song${songPlural} in queue** | ${queueDurationStamp}`; 
                 }
                 if (n == 0) {
                     embed.addField(`__Now Playing__`,`\`${parseInt(n) + 1}.\` [${songInfo.videoDetails.title}](${songInfo.videoDetails.video_url})${lastLine}`);

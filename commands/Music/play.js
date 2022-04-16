@@ -172,7 +172,7 @@ module.exports = {
           // stored queue will return as null if there are no songs left 
           if (queue.songs.length === 0) {
               connection.destroy();
-              return message.channel.send(`Looks like there's no more songs to play, see ya ${message.member}!`);
+              return message.channel.send(`Looks like there's no more songs to play, see ya!`);
           }
 
           const songInfo = await getSongInfo(queue.songs[0]);
