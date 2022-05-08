@@ -1,10 +1,6 @@
 # Sanae
 
-A discord bot that I use in private servers for fun. The roadmap has been moved to the Projects tab.
-
-## Notes
-
-[For creating roles manager](https://www.reddit.com/r/Discordjs/comments/m4qr8i/how_to_have_reaction_collector_run_infinitely_or/)
+A discord bot that I use in private servers for fun.
 
 ## Config.json
 
